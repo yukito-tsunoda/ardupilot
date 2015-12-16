@@ -31,13 +31,14 @@
 
 #include <math.h>
 #include <string.h>
-
+#include <stdio.h>
 extern const AP_HAL::HAL &hal;
 
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 
 #if ENABLE_DEBUG
- # define Debug(fmt, args ...)  do {hal.console->printf("%s:%d: " fmt "\n", __FUNCTION__, __LINE__, ## args); } while(0)
+ //# define Debug(fmt, args ...)  do {hal.console->printf("%s:%d: " fmt "\n", __FUNCTION__, __LINE__, ## args); } while(0)
+ # define Debug(fmt, args ...)  do {printf("%s:%d: " fmt "\n", __FUNCTION__, __LINE__, ## args); } while(0)
 #else
  # define Debug(fmt, args ...)
 #endif
@@ -191,11 +192,16 @@ bool AP_Param::check_var_info(void)
         if (type == AP_PARAM_GROUP) {
             if (i == 0) {
                 // first element can't be a group, for first() call
+                printf("i == 0\n");
                 return false;
             }
             const struct GroupInfo *group_info = (const struct GroupInfo *)PGM_POINTER(&_var_info[i].group_info);
             if (group_info == NULL ||
                 !check_group_info(group_info, &total_size, 0, strlen_P(_var_info[i].name))) {
+                if (group_info == NULL)
+                    printf("group_info == NULL \n");
+                else
+                    printf("check_group_info\n");
                 return false;
             }
         } else {
@@ -203,11 +209,13 @@ bool AP_Param::check_var_info(void)
             if (size == 0) {
                 // not a valid type - the top level list can't contain
                 // AP_PARAM_NONE
+                printf("size == 0\n");
                 return false;
             }
             total_size += size + sizeof(struct Param_header);
         }
         if (duplicate_key(i, key)) {
+            printf("duplicate_key\n");
             return false;
         }
     }

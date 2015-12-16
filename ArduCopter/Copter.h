@@ -82,6 +82,7 @@
 #include <AP_InertialNav/AP_InertialNav.h>     // ArduPilot Mega inertial navigation library
 #include <AC_WPNav/AC_WPNav.h>           // ArduCopter waypoint navigation library
 #include <AC_WPNav/AC_Circle.h>          // circle navigation library
+#include <AC_WPNav/AC_WallNav.h>           // ArduCopter wall follow navigation library
 #include <AP_Declination/AP_Declination.h>     // ArduPilot Mega Declination Helper Library
 #include <AC_Fence/AC_Fence.h>           // Arducopter Fence library
 #include <AP_Scheduler/AP_Scheduler.h>       // main loop scheduler
@@ -355,6 +356,13 @@ private:
     float super_simple_cos_yaw;
     float super_simple_sin_yaw;
 
+#if NAV_WALL_FOLLOW == ENABLED
+    uint8_t sonar_front_health;        // true if we can trust the range from the front sonar
+    int16_t sonar_front_rng;           // distance reported by the front sonar in cm - Values are 20 to 700 generally.
+    bool new_measure_front_sonar;      // true when a new measure is available and has not yet been processed
+    WALLFOLLOW_STATUS_FLAGS wf_mode_status;
+#endif
+
     // Stores initial bearing when armed - initial simple bearing is modified in super simple mode so not suitable
     int32_t initial_armed_bearing;
 
@@ -433,6 +441,9 @@ private:
     AC_PosControl pos_control;
     AC_WPNav wp_nav;
     AC_Circle circle_nav;
+#if NAV_WALL_FOLLOW == ENABLED
+    AC_WallNav wall_nav;
+#endif
 
     // Performance monitoring
     int16_t pmTest1;
@@ -763,6 +774,22 @@ private:
     bool landing_with_GPS();
     bool loiter_init(bool ignore_checks);
     void loiter_run();
+
+    bool wallfollow_init(bool ignore_checks);
+    void wallfollow_run();
+    int16_t read_sonar_front(void);
+
+    // Methods for automatic (waypoint) wall-follow
+    void do_wallfollow(const AP_Mission::Mission_Command& cmd);
+    bool verify_wallfollow(const AP_Mission::Mission_Command& cmd);
+    void auto_wallfollow_start(const Vector3f& local_pos, const Vector3f& origin, const Vector3f& destination, const float target_dist, const bool is_observed_side_left);
+    void auto_wallfollow_run();
+
+    // Mavlink messages:
+    void send_wallfollow_status(mavlink_channel_t chan);
+    void send_ctrl_pos_extra(mavlink_channel_t chan);
+    void send_ctrl_att_extra(mavlink_channel_t chan);
+
     bool poshold_init(bool ignore_checks);
     void poshold_run();
     void poshold_update_pilot_lean_angle(float &lean_angle_filtered, float &lean_angle_raw);

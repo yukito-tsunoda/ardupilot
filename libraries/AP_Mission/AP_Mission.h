@@ -161,6 +161,13 @@ public:
         float horiz_max;        // max horizontal distance the vehicle can move before the command will be aborted.  0 for no horizontal limit
     };
 
+    // nav wall follow command structure
+    /*struct PACKED WallFollow_Command {
+        //float seconds;          // period of delay in seconds
+        float target_dist;          // period of delay in seconds
+    };*/
+
+
     union PACKED Content {
         // jump structure
         Jump_Command jump;
@@ -209,6 +216,9 @@ public:
 
         // cam trigg distance
         Altitude_Wait altitude_wait;
+
+        // wall follow target distance
+        //WallFollow_Command wallfollow;
 
         // location
         Location location;      // Waypoint location

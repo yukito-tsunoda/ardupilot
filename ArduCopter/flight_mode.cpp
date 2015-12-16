@@ -95,6 +95,12 @@ bool Copter::set_mode(uint8_t mode)
             success = brake_init(ignore_checks);
             break;
 
+#if NAV_WALL_FOLLOW == ENABLED
+        case WALL_FOLLOW:
+            success = wallfollow_init(ignore_checks);
+            break;
+#endif  // NAV_WALL_FOLLOW
+
         default:
             success = false;
             break;
@@ -206,6 +212,13 @@ void Copter::update_flight_mode()
         case BRAKE:
             brake_run();
             break;
+
+#if NAV_WALL_FOLLOW == ENABLED
+        case WALL_FOLLOW:
+            wallfollow_run();
+            break;
+#endif  // NAV_WALL_FOLLOW
+
     }
 }
 
@@ -261,6 +274,7 @@ bool Copter::mode_requires_GPS(uint8_t mode) {
         case POSHOLD:
         case BRAKE:
             return true;
+        // WALL_FOLLOW mode can run with the optical flow instead of GPS
         default:
             return false;
     }
@@ -361,6 +375,9 @@ void Copter::print_flight_mode(AP_HAL::BetterStream *port, uint8_t mode)
         break;
     case BRAKE:
         port->print_P(PSTR("BRAKE"));
+        break;
+    case WALL_FOLLOW:
+        port->print_P(PSTR("WALL_FOLLOW"));
         break;
     default:
         port->printf_P(PSTR("Mode(%u)"), (unsigned)mode);

@@ -87,6 +87,12 @@ void Copter::auto_run()
     case Auto_Loiter:
         auto_loiter_run();
         break;
+
+#if NAV_WALL_FOLLOW == ENABLED
+    case Auto_WallFollow:
+        auto_wallfollow_run();
+        break;
+#endif  // NAV_WALL_FOLLOW
     }
 }
 

@@ -589,6 +589,13 @@ bool AP_Mission::mavlink_to_mission_cmd(const mavlink_mission_item_t& packet, AP
         cmd.content.yaw.relative_angle = packet.param4; // lng=0: absolute angle provided, lng=1: relative angle provided
         break;
 
+    case MAV_CMD_NAV_WPT_WALLFOLLOW:                    // MAV ID: 165
+        copy_location = true;
+        // Same data as for a regular waypoint, with the target distance
+        // in param3
+        cmd.p1 = packet.param3;
+        break;
+
     case MAV_CMD_DO_SET_MODE:                           // MAV ID: 176
         cmd.p1 = packet.param1;                         // flight mode identifier
         break;
@@ -916,6 +923,13 @@ bool AP_Mission::mission_cmd_to_mavlink(const AP_Mission::Mission_Command& cmd, 
         packet.param2 = cmd.content.yaw.turn_rate_dps;  // 0 = use default turn rate otherwise specific turn rate in deg/sec
         packet.param3 = cmd.content.yaw.direction;      // -1 = ccw, +1 = cw
         packet.param4 = cmd.content.yaw.relative_angle; // 0 = absolute angle provided, 1 = relative angle provided
+        break;
+
+    case MAV_CMD_NAV_WPT_WALLFOLLOW:                    // MAV ID: 165
+        copy_location = true;
+        // Same data as for a regular waypoint, with the target distance
+        // in param3
+        packet.param3 = cmd.p1;                         // positive or negative target distance, depending on left/right
         break;
 
     case MAV_CMD_DO_SET_MODE:                           // MAV ID: 176

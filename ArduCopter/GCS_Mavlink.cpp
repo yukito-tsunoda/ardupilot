@@ -410,6 +410,22 @@ void NOINLINE Copter::send_rangefinder(mavlink_channel_t chan)
 }
 #endif
 
+#if NAV_WALL_FOLLOW == ENABLED
+void NOINLINE Copter::send_wallfollow_status(mavlink_channel_t chan)
+{
+    mavlink_msg_wallfollow_status_send(
+            chan,
+            wf_mode_status,        // status
+            (float)wall_nav.get_target_dist_to_wall(),       // Target dist to wall (cm)
+            (float)sonar_front_rng,                           // Sensor dist to wall (cm)
+            (float)wall_nav.get_wall_rng_filt(),              // Filtered wall distance (cm)
+            (float)wall_nav.get_wall_yaw_normal() / 100.0,    // Wall yaw normal (deg)
+            pos_control.get_pos_target().x,        // Loiter target X (m)
+            pos_control.get_pos_target().y,        // Loiter target Y (m)
+            pos_control.get_pos_target().z);       // Loiter target Z (m)
+}
+#endif  // NAV_WALL_FOLLOW
+
 /*
   send RPM packet
  */
@@ -747,6 +763,17 @@ bool GCS_MAVLINK::try_send_message(enum ap_message id)
     case MSG_MAG_CAL_REPORT:
         copter.compass.send_mag_cal_report(chan);
         break;
+
+#if NAV_WALL_FOLLOW == ENABLED
+    case MSG_WALLFOLLOW_STATUS:
+        CHECK_PAYLOAD_SIZE(WALLFOLLOW_STATUS);
+        copter.send_wallfollow_status(chan);
+        break;
+#else
+    case MSG_WALLFOLLOW_STATUS:
+        break;
+#endif  // NAV_WALL_FOLLOW
+
     }
 
     return true;
@@ -973,6 +1000,9 @@ GCS_MAVLINK::data_stream_send(void)
         send_message(MSG_EKF_STATUS_REPORT);
         send_message(MSG_VIBRATION);
         send_message(MSG_RPM);
+#if NAV_WALL_FOLLOW == ENABLED
+        send_message(MSG_WALLFOLLOW_STATUS);
+#endif  // NAV_WALL_FOLLOW
     }
 }
 

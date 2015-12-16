@@ -101,7 +101,8 @@ enum autopilot_modes {
     FLIP =         14,  // automatically flip the vehicle on the roll axis
     AUTOTUNE =     15,  // automatically tune the vehicle's roll and pitch gains
     POSHOLD =      16,  // automatic position hold with manual override, with automatic throttle
-    BRAKE =        17   // full-brake using inertial/GPS system, no pilot input
+    BRAKE =        17,   // full-brake using inertial/GPS system, no pilot input
+    WALL_FOLLOW =  18   // similar to loiter, with control to maintain constant distance to a wall
 };
 
 // Tuning enumeration
@@ -176,7 +177,8 @@ enum AutoMode {
     Auto_Circle,
     Auto_Spline,
     Auto_NavGuided,
-    Auto_Loiter
+    Auto_Loiter,
+    Auto_WallFollow
 };
 
 // Guided modes

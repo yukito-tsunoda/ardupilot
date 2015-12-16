@@ -93,6 +93,9 @@ Copter::Copter(void) :
                 g.p_pos_xy, g.pi_vel_xy),
     wp_nav(inertial_nav, ahrs, pos_control, attitude_control),
     circle_nav(inertial_nav, ahrs, pos_control),
+#if NAV_WALL_FOLLOW == ENABLED
+    wall_nav(inertial_nav, ahrs, pos_control, attitude_control),
+#endif
     pmTest1(0),
     fast_loopTimer(0),
     mainLoop_count(0),
@@ -122,6 +125,12 @@ Copter::Copter(void) :
 #endif
 #if PRECISION_LANDING == ENABLED
     precland(ahrs, inertial_nav, g.pi_precland, MAIN_LOOP_SECONDS),
+#endif
+#if NAV_WALL_FOLLOW == ENABLED
+    sonar_front_health(0),
+    sonar_front_rng(0),
+    new_measure_front_sonar(false),
+    wf_mode_status(WALLFOLLOW_STATUS_FLAGS::WF_OFF),
 #endif
     in_mavlink_delay(false),
     gcs_out_of_time(false),

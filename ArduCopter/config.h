@@ -192,6 +192,10 @@
  # define SONAR_TILT_CORRECTION DISABLED
 #endif
 
+#ifndef CONFIG_SONAR_FRONT
+ # define CONFIG_SONAR_FRONT ENABLED
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // HIL_MODE                                 OPTIONAL
 
@@ -353,6 +357,12 @@
 // Nav-Guided - allows external nav computer to control vehicle
 #ifndef NAV_GUIDED
  # define NAV_GUIDED    ENABLED
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// Wall-Follow - using a front range finder, the copter follows a wall
+#ifndef NAV_WALL_FOLLOW
+ # define NAV_WALL_FOLLOW ENABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////

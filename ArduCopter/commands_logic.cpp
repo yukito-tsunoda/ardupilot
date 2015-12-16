@@ -146,6 +146,12 @@ bool Copter::start_command(const AP_Mission::Mission_Command& cmd)
         break;
 #endif
 
+#if NAV_WALL_FOLLOW == ENABLED
+    case MAV_CMD_NAV_WPT_WALLFOLLOW:                    // 165
+        do_wallfollow(cmd);
+        break;
+#endif
+
     default:
         // do nothing with unrecognized MAVLink messages
         break;
@@ -234,6 +240,12 @@ bool Copter::verify_command(const AP_Mission::Mission_Command& cmd)
     case MAV_CMD_DO_PARACHUTE:
         // assume parachute was released successfully
         return true;
+
+#if NAV_WALL_FOLLOW == ENABLED
+    case MAV_CMD_NAV_WPT_WALLFOLLOW:
+        return verify_wallfollow(cmd);
+        break;
+#endif
 
     default:
         // return true if we do not recognize the command so that we move on to the next command
