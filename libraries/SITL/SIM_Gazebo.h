@@ -27,6 +27,8 @@ namespace SITL {
 
 #define NB_GAZEBO_SERVOS    16
 
+#define LIDAR_NUM_RAY 180
+
 /*
   Gazebo simulator
  */
@@ -74,6 +76,7 @@ private:
       // You can add here extra sensors to pass along
       double sonar_down;                            // [m] downward facing range finder
       double sonar_front;                           // [m]
+      double lidar_scan[LIDAR_NUM_RAY];
     };
 
     /*
@@ -143,6 +146,8 @@ protected:
     bool _is_sonar_front_present;
     /* Last range measurement by the forward facing range finder */
     double _sonar_front;
+
+    double lidar_scan[180];
 };
 
 } // namespace SITL

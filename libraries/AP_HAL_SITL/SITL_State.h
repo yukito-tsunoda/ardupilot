@@ -75,6 +75,7 @@ private:
     void _update_range_finder(float range);
     void _update_range_finder_front(float range);
     void _update_range_finder_front_state(bool is_present);
+    void _update_lidar(double *lidar);
 
     struct gps_data {
         double latitude;

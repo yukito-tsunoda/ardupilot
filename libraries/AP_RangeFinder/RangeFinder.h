@@ -29,6 +29,8 @@
 #define RANGEFINDER_PREARM_ALT_MAX_CM           200
 #define RANGEFINDER_PREARM_REQUIRED_CHANGE_CM   50
 
+#define LIDAR_NUM_RAY 180
+
 class AP_RangeFinder_Backend; 
  
 class RangeFinder
@@ -70,6 +72,7 @@ public:
     struct RangeFinder_State {
         uint8_t                instance;    // the instance number of this RangeFinder
         uint16_t               distance_cm; // distance: in cm
+        double lidar_scan[LIDAR_NUM_RAY];
         uint16_t               voltage_mv;  // voltage in millivolts,
                                             // if applicable, otherwise 0
         enum RangeFinder_Status status;     // sensor status
@@ -115,6 +118,15 @@ public:
     }
     uint16_t distance_cm() const {
         return distance_cm(primary_instance);
+    }
+
+    void get_lidar_scan(uint8_t instance, double scan[])
+    {
+        for(int i=0; i<LIDAR_NUM_RAY; ++i)
+         scan[i] = _RangeFinder_STATE(instance).lidar_scan[i];
+
+        //for(int i=0; i< 180; ++i)
+            //::printf("\t%f ", scan[i]);
     }
 
     uint16_t voltage_mv(uint8_t instance) const {

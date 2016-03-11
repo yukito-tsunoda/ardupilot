@@ -36,6 +36,8 @@ struct PACKED sitl_fdm_extras {
 
     double sonar_front;              // m
     bool is_sonar_front_present;
+
+    double lidar[180];
     // Insert here any additional sensor
     // ...
 

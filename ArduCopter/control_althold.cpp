@@ -32,6 +32,45 @@ void Copter::althold_run()
     // apply SIMPLE mode transform to pilot inputs
     update_simple_mode();
 
+//--------------
+    wall_nav.update_dist_to_wall_sensor_measure(sonar_front_rng);
+
+    float range = wall_nav.get_range(); // cm
+
+
+    // ::printf("\n\n------------------------------\n");
+
+    // for(int i=0; i<180; ++i)
+    //     ::printf("%f ", lidar_scan[i]);
+
+
+    int min_idx = 0;
+
+    for(int i=0; i<180; ++i)
+    {
+        if(lidar_scan[i] < lidar_scan[min_idx])
+            min_idx = i;
+    }
+
+    if(lidar_scan[min_idx] < 2)
+    {
+        int neutral = 1500;
+        int speed = 80;
+
+        min_idx = - (min_idx - 90);
+
+        int new_roll = -sin(min_idx/180.0 * 3.1416) * speed + neutral;
+        int new_pitch = cos(min_idx/180.0 * 3.1416) * speed + neutral;
+        set_rpm_to_avoid(new_roll, new_pitch);
+
+        ::printf("!!!!!!!!!!! %d %d %d \n",min_idx, new_roll, new_pitch);
+    }
+
+
+
+    	
+//--------------
+
     // get pilot desired lean angles
     float target_roll, target_pitch;
     get_pilot_desired_lean_angles(channel_roll->control_in, channel_pitch->control_in, target_roll, target_pitch, attitude_control.get_althold_lean_angle_max());

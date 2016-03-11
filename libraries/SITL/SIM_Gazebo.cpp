@@ -270,8 +270,17 @@ void Gazebo::recv_fdm(const struct sitl_input &input)
     // Extra sensors -------------------------
     _sonar_down = pkt.sonar_down;
     _sonar_front = pkt.sonar_front;
+
+
+    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+        lidar_scan[i] = pkt.lidar_scan[i];
     // ...
     // ---------------------------------------
+
+    // for(int i=0; i<LIDAR_NUM_RAY; ++i)
+    //     fprintf(stdout, "%f ", pkt.lidar_scan[i]);
+
+    // fprintf(stdout, "\n\n");
 
     // auto-adjust to simulation frame rate
     double deltat = pkt.timestamp - _last_timestamp;    // [seconds]
@@ -370,6 +379,9 @@ void Gazebo::fill_fdm_extras(struct sitl_fdm_extras &fdm_extras) const
     fdm_extras.is_sonar_front_present = _is_sonar_front_present;
 
     fdm_extras.magic = FDM_EXTRAS_MAGIC;
+
+    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+        fdm_extras.lidar[i] = lidar_scan[i];
 }
 
 } // namespace SITL

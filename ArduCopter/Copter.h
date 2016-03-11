@@ -359,9 +359,14 @@ private:
 #if NAV_WALL_FOLLOW == ENABLED
     uint8_t sonar_front_health;        // true if we can trust the range from the front sonar
     int16_t sonar_front_rng;           // distance reported by the front sonar in cm - Values are 20 to 700 generally.
+
+
+
     bool new_measure_front_sonar;      // true when a new measure is available and has not yet been processed
     WALLFOLLOW_STATUS_FLAGS wf_mode_status;
 #endif
+
+    double lidar_scan[180];
 
     // Stores initial bearing when armed - initial simple bearing is modified in super simple mode so not suitable
     int32_t initial_armed_bearing;
@@ -904,6 +909,7 @@ private:
     void init_rc_out();
     void enable_motor_output();
     void read_radio();
+    void set_rpm_to_avoid(int16_t roll, int16_t pitch);
     void set_throttle_and_failsafe(uint16_t throttle_pwm);
     void set_throttle_zero_flag(int16_t throttle_control);
     void init_barometer(bool full_calibration);

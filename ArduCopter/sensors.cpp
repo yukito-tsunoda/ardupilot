@@ -84,6 +84,8 @@ int16_t Copter::read_sonar_front(void)
     // We leave the update() call to the main loop
     //sonar.update();
 
+    sonar.get_lidar_scan(RANGEFINDER_FRONT_INSTANCE, lidar_scan);
+
     // exit immediately if sonar is disabled
     if (sonar.status(RANGEFINDER_FRONT_INSTANCE) != RangeFinder::RangeFinder_Good) {
         sonar_front_health = 0;
@@ -102,6 +104,8 @@ int16_t Copter::read_sonar_front(void)
     }
 
     sonar_front_rng = temp_rng;
+
+    
     new_measure_front_sonar = true;
 
  #if SONAR_FRONT_TILT_CORRECTION == 1       // not for now, but can also be applied to horizontal sonar

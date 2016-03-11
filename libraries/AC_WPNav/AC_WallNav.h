@@ -154,6 +154,8 @@ public:
     int32_t get_roll() const { return _pos_control.get_roll(); };
     int32_t get_pitch() const { return _pos_control.get_pitch(); };
 
+    float get_range() const {return _wall_rng_filt;}
+
     int32_t get_wall_yaw_normal() const {return _wall_yaw_normal_deg100; };
     int16_t get_target_dist_to_wall() const {return _target_dist_to_wall; };
 
