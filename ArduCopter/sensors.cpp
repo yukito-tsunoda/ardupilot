@@ -84,6 +84,8 @@ int16_t Copter::read_sonar_front(void)
     // We leave the update() call to the main loop
     //sonar.update();
 
+    sonar.get_lidar_scan(RANGEFINDER_FRONT_INSTANCE, lidar_scan);
+    
     // exit immediately if sonar is disabled
     if (sonar.status(RANGEFINDER_FRONT_INSTANCE) != RangeFinder::RangeFinder_Good) {
         sonar_front_health = 0;
