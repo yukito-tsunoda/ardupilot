@@ -346,6 +346,10 @@ private:
     float super_simple_cos_yaw;
     float super_simple_sin_yaw;
 
+    uint8_t sonar_front_health;        // true if we can trust the range from the front sonar
+    int16_t sonar_front_rng;           // distance reported by the front sonar in cm - Values are 20 to 700 generally.
+    bool new_measure_front_sonar;      // true when a new measure is available and has not yet been processed
+
     // Stores initial bearing when armed - initial simple bearing is modified in super simple mode so not suitable
     int32_t initial_armed_bearing;
 
@@ -750,6 +754,7 @@ private:
     bool landing_with_GPS();
     bool loiter_init(bool ignore_checks);
     void loiter_run();
+    int16_t read_sonar_front(void);
     bool poshold_init(bool ignore_checks);
     void poshold_run();
     void poshold_update_pilot_lean_angle(float &lean_angle_filtered, float &lean_angle_raw);

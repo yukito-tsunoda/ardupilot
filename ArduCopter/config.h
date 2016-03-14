@@ -184,6 +184,10 @@
  # define SONAR_TILT_CORRECTION DISABLED
 #endif
 
+#ifndef CONFIG_SONAR_FRONT
+  # define CONFIG_SONAR_FRONT ENABLED
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // HIL_MODE                                 OPTIONAL
 
