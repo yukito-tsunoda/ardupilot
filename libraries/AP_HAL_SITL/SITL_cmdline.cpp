@@ -46,6 +46,7 @@ void SITL_State::_usage(void)
            "\t--speedup SPEEDUP  set simulation speedup\n"
            "\t--gimbal           enable simulated MAVLink gimbal\n"
            "\t--autotest-dir DIR set directory for additional files\n"
+           "\t--launch-world FIL set ROS/Gazebo .launch file name\n"
         );
 }
 
@@ -77,6 +78,7 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     const char *home_str = NULL;
     const char *model_str = NULL;
     char *autotest_dir = NULL;
+    char *ros_launch_file = NULL;
     float speedup = 1.0f;
 
     if (asprintf(&autotest_dir, SKETCHBOOK "/Tools/autotest") <= 0) {
@@ -101,7 +103,8 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
     enum long_options {
         CMDLINE_CLIENT=0,
         CMDLINE_GIMBAL,
-        CMDLINE_AUTOTESTDIR
+        CMDLINE_AUTOTESTDIR,
+        CMDLINE_ROSLAUNCH
     };
 
     const struct GetOptLong::option options[] = {
@@ -118,6 +121,7 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         {"client",          true,   0, CMDLINE_CLIENT},
         {"gimbal",          false,  0, CMDLINE_GIMBAL},
         {"autotest-dir",    true,   0, CMDLINE_AUTOTESTDIR},
+        {"ros-launch",      true,   0, CMDLINE_ROSLAUNCH},
         {0, false, 0, 0}
     };
 
@@ -170,6 +174,9 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
         case CMDLINE_AUTOTESTDIR:
             autotest_dir = strdup(gopt.optarg);
             break;
+        case CMDLINE_ROSLAUNCH:
+            ros_launch_file = strdup(gopt.optarg);
+            break;
         default:
             _usage();
             exit(1);
@@ -183,6 +190,8 @@ void SITL_State::_parse_command_line(int argc, char * const argv[])
                 sitl_model->set_speedup(speedup);
                 sitl_model->set_instance(_instance);
                 sitl_model->set_autotest_dir(autotest_dir);
+                sitl_model->set_ros_launch_file(ros_launch_file);     // To pass additional parameters on the simulation world
+                sitl_model->finalize_creation();                // For constructor methods that require speedup/instance/autotest_dir
                 _synthetic_clock_mode = true;
                 printf("Started model %s at %s at speed %.1f\n", model_str, home_str, speedup);
                 break;
