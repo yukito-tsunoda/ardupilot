@@ -270,6 +270,9 @@ void Gazebo::recv_fdm(const struct sitl_input &input)
     // ...
     // ---------------------------------------
 
+    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+        lidar_scan[i] = pkt.lidar_scan[i];
+
     // auto-adjust to simulation frame rate
     double deltat = pkt.timestamp - _last_timestamp;    // [seconds]
     time_now_us += deltat * 1.0e6;
@@ -367,6 +370,9 @@ void Gazebo::fill_fdm_extras(struct sitl_fdm_extras &fdm_extras) const
     fdm_extras.is_sonar_front_present = _is_sonar_front_present;
 
     fdm_extras.magic = FDM_EXTRAS_MAGIC;
+
+    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+        fdm_extras.lidar[i] = lidar_scan[i];
 }
 
 #endif // CONFIG_HAL_BOARD

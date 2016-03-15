@@ -216,6 +216,8 @@ void SITL_State::_fdm_input_step(void)
            _update_range_finder_front(_sitl->state_extras.sonar_front);
        else
            _update_range_finder_front_state(false);
+
+       _update_lidar(_sitl->state_extras.lidar);
     }
 
     // trigger all APM timers.

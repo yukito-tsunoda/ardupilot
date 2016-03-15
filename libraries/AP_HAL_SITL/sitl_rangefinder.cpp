@@ -26,6 +26,7 @@ extern const AP_HAL::HAL& hal;
 #define RANGEFINDER_DOWN_INST     0
 #define RANGEFINDER_FRONT_INST    1
 
+#define LIDAR_NUM_RAY 180
 
 /*
   setup the range_finder with new input
@@ -68,6 +69,31 @@ void SITL_State::_update_range_finder_front(float range)
     // Use instance 1 for the front range finder
     _range_finder->setHIL(RANGEFINDER_FRONT_INST, state);
 
+}
+
+void SITL_State::_update_lidar(double *lidar_scan)
+{
+    if (_range_finder == NULL) {
+        // no range_finder in this sketch
+        return;
+    }
+
+    RangeFinder::RangeFinder_State state;
+    state.instance = RANGEFINDER_FRONT_INST;
+
+
+    //state.distance_cm = range*100;
+    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+      state.lidar_scan[i] = lidar_scan[i];
+
+    // for(int i=0; i<LIDAR_NUM_RAY; ++i)
+    //   fprintf(stdout, "%f ", state.lidar_scan[i]);
+    //   fprintf(stderr, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+    state.status = RangeFinder::RangeFinder_Good;
+
+    // Use instance 1 for the front range finder
+    _range_finder->setHIL(RANGEFINDER_FRONT_INST, state);
 }
 
 /*

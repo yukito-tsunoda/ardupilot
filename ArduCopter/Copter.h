@@ -84,6 +84,7 @@
 #include <AP_InertialNav/AP_InertialNav.h>     // ArduPilot Mega inertial navigation library
 #include <AC_WPNav/AC_WPNav.h>           // ArduCopter waypoint navigation library
 #include <AC_WPNav/AC_Circle.h>          // circle navigation library
+#include <AC_WPNav/AC_WallNav.h> 
 #include <AP_Declination/AP_Declination.h>     // ArduPilot Mega Declination Helper Library
 #include <AC_Fence/AC_Fence.h>           // Arducopter Fence library
 #include <SITL/SITL.h>               // software in the loop support
@@ -372,6 +373,8 @@ private:
     AP_Frsky_Telem frsky_telemetry;
 #endif
 
+    double lidar_scan[180];
+
     // Altitude
     // The cm/s we are moving up or down based on filtered data - Positive = UP
     int16_t climb_rate;
@@ -428,6 +431,8 @@ private:
     AC_PosControl pos_control;
     AC_WPNav wp_nav;
     AC_Circle circle_nav;
+
+    AC_WallNav wall_nav;
 
     // Performance monitoring
     int16_t pmTest1;
@@ -868,6 +873,7 @@ private:
     void init_rc_out();
     void enable_motor_output();
     void read_radio();
+    void set_rpm_to_avoid(int16_t roll, int16_t pitch);
     void set_throttle_and_failsafe(uint16_t throttle_pwm);
     void set_throttle_zero_flag(int16_t throttle_control);
     void init_barometer(bool full_calibration);
