@@ -71,31 +71,6 @@ void SITL_State::_update_range_finder_front(float range)
 
 }
 
-void SITL_State::_update_lidar(double *lidar_scan)
-{
-    if (_range_finder == NULL) {
-        // no range_finder in this sketch
-        return;
-    }
-
-    RangeFinder::RangeFinder_State state;
-    state.instance = RANGEFINDER_FRONT_INST;
-
-
-    //state.distance_cm = range*100;
-    for(int i=0; i<LIDAR_NUM_RAY; ++i)
-      state.lidar_scan[i] = lidar_scan[i];
-
-    // for(int i=0; i<LIDAR_NUM_RAY; ++i)
-    //   fprintf(stdout, "%f ", state.lidar_scan[i]);
-    //   fprintf(stderr, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-
-    state.status = RangeFinder::RangeFinder_Good;
-
-    // Use instance 1 for the front range finder
-    _range_finder->setHIL(RANGEFINDER_FRONT_INST, state);
-}
-
 /*
   This function is for a frontal range finder.
   For a downward facing range finder, use '_update_range_finder()'.

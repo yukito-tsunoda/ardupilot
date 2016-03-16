@@ -123,6 +123,7 @@ public:
         k_param_serial2_baud,           // deprecated - remove
         k_param_land_repositioning,
         k_param_sonar, // sonar object
+        k_param_lidar, // lidar object
         k_param_fs_ekf_thresh,
         k_param_terrain,
         k_param_acro_expo,

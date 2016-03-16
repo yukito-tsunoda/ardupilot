@@ -72,6 +72,7 @@
 #include <RC_Channel/RC_Channel.h>         // RC Channel Library
 #include <AP_Motors/AP_Motors.h>          // AP Motors library
 #include <AP_RangeFinder/AP_RangeFinder.h>     // Range finder library
+#include <AC_Lidar/AC_Lidar.h>     // LiDAR library
 #include <AP_OpticalFlow/AP_OpticalFlow.h>     // Optical Flow library
 #include <Filter/Filter.h>             // Filter library
 #include <AP_Buffer/AP_Buffer.h>          // APM FIFO Buffer
@@ -108,6 +109,8 @@
 #include <AP_RPM/AP_RPM.h>
 #include <AC_InputManager/AC_InputManager.h>        // Pilot input handling library
 #include <AC_InputManager/AC_InputManager_Heli.h>   // Heli specific pilot input handling library
+
+#include <AC_Lidar/AC_Lidar.h>
 
 // AP_HAL to Arduino compatibility layer
 // Configuration
@@ -176,6 +179,11 @@ private:
 #if CONFIG_SONAR == ENABLED
     RangeFinder sonar{serial_manager};
     bool sonar_enabled; // enable user switch for sonar
+#endif
+
+#if CONFIG_LIDAR == ENABLED
+    AC_Lidar lidar{serial_manager};
+    bool lidar_enabled; // enable user switch for lidar
 #endif
 
     AP_RPM rpm_sensor;

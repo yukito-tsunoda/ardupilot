@@ -81,6 +81,7 @@ void SITL_State::_sitl_setup(void)
     _terrain = (AP_Terrain *)AP_Param::find_object("TERRAIN_");
     _optical_flow = (OpticalFlow *)AP_Param::find_object("FLOW");
     _range_finder = (RangeFinder *)AP_Param::find_object("RNGFND");
+    _lidar = (Lidar *)AP_Param::find_object("LDR");
 
     if (_sitl != NULL) {
         // setup some initial values
@@ -91,6 +92,7 @@ void SITL_State::_sitl_setup(void)
         _update_gps(0, 0, 0, 0, 0, 0, false);
         _update_range_finder(0);
         _update_range_finder_front(0);
+        _update_lidar(0);
 #endif
         if (enable_gimbal) {
             gimbal = new Gimbal(_sitl->state);

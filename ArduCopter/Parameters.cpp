@@ -1038,6 +1038,12 @@ const AP_Param::Info Copter::var_info[] PROGMEM = {
     GOBJECT(sonar,   "RNGFND", RangeFinder),
 #endif
 
+#if CONFIG_LIDAR == ENABLED
+    // @Group: LIDAR
+    // @Path: ../libraries/AC_Lidar/Lidar.cpp
+    GOBJECT(lidar,   "LDR", AC_Lidar),
+#endif
+
 #if AP_TERRAIN_AVAILABLE
     // @Group: TERRAIN_
     // @Path: ../libraries/AP_Terrain/AP_Terrain.cpp
