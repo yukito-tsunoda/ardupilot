@@ -25,8 +25,6 @@ void AC_LiDAR_RPLiDARSerial::init(const AP_SerialManager& serial_manager)
 	if (_port) {
         _initialised = true;
     }
-
-	_port->begin(115200, BUFF_SIZE, 128);
 }
 
 void AC_LiDAR_RPLiDARSerial::update()
