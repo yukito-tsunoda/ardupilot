@@ -135,6 +135,11 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] PROGMEM = {
 #if EPM_ENABLED == ENABLED
     { SCHED_TASK(epm_update),           40,     75 },
 #endif
+
+#if CONFIG_LIDAR == ENABLED
+	{ SCHED_TASK(read_lidar),			40,		100},
+#endif
+
 #ifdef USERHOOK_FASTLOOP
     { SCHED_TASK(userhook_FastLoop),     4,     75 },
 #endif

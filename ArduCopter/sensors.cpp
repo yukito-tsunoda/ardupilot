@@ -71,6 +71,19 @@ int16_t Copter::read_sonar(void)
 #endif
 }
 
+#if CONFIG_LIDAR == ENABLED
+void Copter::init_lidar(void)
+{
+	lidar.init(serial_manager);
+}
+
+void Copter::read_lidar(void)
+{
+	lidar.update();
+}
+#endif
+
+
 // Dirty trick, should be replaced by a new parameter for range finder
 // that indicates their orientation (bottom/front/left/...). This way
 // the primary range finder instance, used for terrain following, would

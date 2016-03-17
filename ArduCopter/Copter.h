@@ -109,6 +109,8 @@
 #include <AC_InputManager/AC_InputManager.h>        // Pilot input handling library
 #include <AC_InputManager/AC_InputManager_Heli.h>   // Heli specific pilot input handling library
 
+#include "../libraries/AC_LiDAR/AC_LiDAR.h"
+
 // AP_HAL to Arduino compatibility layer
 // Configuration
 #include "defines.h"
@@ -194,6 +196,11 @@ private:
     // Optical flow sensor
 #if OPTFLOW == ENABLED
     OpticalFlow optflow;
+#endif
+
+#if CONFIG_LIDAR == ENABLED
+    AC_LiDAR lidar{serial_manager};
+    //AC_LiDAR lidar;
 #endif
 
     // gnd speed limit required to observe optical flow sensor limits
@@ -880,6 +887,8 @@ private:
     void read_barometer(void);
     void init_sonar(void);
     int16_t read_sonar(void);
+    void init_lidar(void);
+    void read_lidar(void);
     void init_compass();
     void init_optflow();
     void update_optical_flow(void);
