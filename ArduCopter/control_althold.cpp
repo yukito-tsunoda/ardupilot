@@ -43,38 +43,37 @@ void Copter::althold_run()
 
 
 //-------------------------------------------------
-    wall_nav.update_dist_to_wall_sensor_measure(sonar_front_rng);
 
-    float range = wall_nav.get_range(); // cm
-
-
-    // ::printf("\n\n------------------------------\n");
-
-    // for(int i=0; i<180; ++i)
-    //     ::printf("%f ", lidar_scan[i]);
-
-
-    int min_idx = 0;
-
-    for(int i=0; i<180; ++i)
+    // TODO: Check if lidar is initialized
+    if(lidar.obstacle_avoid())
     {
-        if(lidar_scan[i] < lidar_scan[min_idx])
-            min_idx = i;
+
+        //hal.console->printf_P(PSTR("\n\n%f %d"),lidar.obstacle_direction(), lidar.obstacle_elapsed_time_ms());
+
+    	/*
+		int min_idx = 0;
+
+		for(int i=0; i<180; ++i)
+		{
+			if(lidar_scan[i] < lidar_scan[min_idx])
+				min_idx = i;
+		}
+
+		if(lidar_scan[min_idx] < 2)
+		{
+			int neutral = 1500;
+			int speed = 80;
+
+			min_idx = - (min_idx - 90);
+
+			int new_roll = -sin(min_idx/180.0 * 3.1416) * speed + neutral;
+			int new_pitch = cos(min_idx/180.0 * 3.1416) * speed + neutral;
+			set_rpm_to_avoid(new_roll, new_pitch);
+
+			//::printf("!! %d %d %d \n",min_idx, new_roll, new_pitch);
+		}
+		*/
     }
-
-    if(lidar_scan[min_idx] < 2)
-    {
-        int neutral = 1500;
-        int speed = 80;
-
-        min_idx = - (min_idx - 90);
-
-        int new_roll = -sin(min_idx/180.0 * 3.1416) * speed + neutral;
-        int new_pitch = cos(min_idx/180.0 * 3.1416) * speed + neutral;
-        set_rpm_to_avoid(new_roll, new_pitch);
-
-        ::printf("!!!!!!!!!!! %d %d %d \n",min_idx, new_roll, new_pitch);
-    }        
 //-------------------------------------------------
 
 

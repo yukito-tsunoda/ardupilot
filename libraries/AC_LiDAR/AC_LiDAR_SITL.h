@@ -8,12 +8,12 @@
 #ifndef LIBRARIES_AC_LIDAR_AC_LIDAR_SITL_H_
 #define LIBRARIES_AC_LIDAR_AC_LiDAR_SITL_H_
 
+#include "AC_LiDAR_Backend.h"
 #include <AP_HAL/AP_HAL.h>
-#include "../AC_LiDAR/AC_LiDAR_Backend.h"
 
 class AC_LiDAR_SITL: public AC_LiDAR_Backend {
 public:
-	AC_LiDAR_SITL(AC_LiDAR &frontend,  uint8_t instance);
+	AC_LiDAR_SITL(AC_LiDAR &_frontend,  uint8_t _instance, AC_LiDAR::Obstacle &_obstacle);
     // init - performs any required initialisation for this instance
     virtual void init(const AP_SerialManager& serial_manager);
 

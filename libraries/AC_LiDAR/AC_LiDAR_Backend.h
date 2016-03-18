@@ -8,14 +8,15 @@
 #ifndef LIBRARIES_AC_LIDAR_AC_LIDAR_BACKEND_H_
 #define LIBRARIES_AC_LIDAR_AC_LIDAR_BACKEND_H_
 
-#include "../AC_LiDAR/AC_LiDAR.h"
+#include "AC_LiDAR.h"
 
 class AC_LiDAR_Backend {
 public:
     // Constructor
-	AC_LiDAR_Backend(AC_LiDAR &frontend,  uint8_t instance) :
-        _frontend(frontend),
-        _instance(instance)
+	AC_LiDAR_Backend(AC_LiDAR &_frontend, uint8_t _instance, AC_LiDAR::Obstacle &_obstacle) :
+        frontend(_frontend),
+        instance(_instance),
+		obstacle(_obstacle)
 	{}
     // Virtual destructor
 	virtual ~AC_LiDAR_Backend(void) {}
@@ -27,9 +28,9 @@ public:
     virtual void update() = 0;
 
 protected:
-    AC_LiDAR    &_frontend; // reference to the front end which holds parameters
-    uint8_t     _instance;  // this instance's number
-
+    AC_LiDAR    &frontend; // reference to the front end which holds parameters
+    uint8_t     instance;  // this instance's number
+    AC_LiDAR::Obstacle &obstacle;
 };
 
 #endif /* LIBRARIES_AC_LIDAR_AC_LIDAR_BACKEND_H_ */

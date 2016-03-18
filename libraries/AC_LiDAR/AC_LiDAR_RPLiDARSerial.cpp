@@ -5,15 +5,14 @@
  *      Author: moon
  */
 
-#include "../AC_LiDAR/AC_LiDAR_RPLiDARSerial.h"
-
+#include "AC_LiDAR_RPLiDARSerial.h"
 #include <AP_HAL/AP_HAL.h>
 
 extern const AP_HAL::HAL& hal;
 
 
-AC_LiDAR_RPLiDARSerial::AC_LiDAR_RPLiDARSerial(AC_LiDAR& frontend,uint8_t instance):
-	AC_LiDAR_Backend(frontend, instance),
+AC_LiDAR_RPLiDARSerial::AC_LiDAR_RPLiDARSerial(AC_LiDAR &_frontend, uint8_t _instance, AC_LiDAR::Obstacle &_obstacle):
+	AC_LiDAR_Backend(_frontend, _instance, _obstacle),
     _port(NULL),
     _initialised(false)
 {}
@@ -27,35 +26,70 @@ void AC_LiDAR_RPLiDARSerial::init(const AP_SerialManager& serial_manager)
     }
 }
 
+
 void AC_LiDAR_RPLiDARSerial::update()
 {
     // exit immediately if not initialised
-    if (!_initialised) {
+    if (!_initialised)
         return;
+
+
+    int buff_cnt = read_serial();
+
+    if (obstacle.avoid)
+    {
+    	// Clear buffer
+    	memset(buff, 0, sizeof(buff));
+
+    	// Check if avoidance is currently active
+		if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 3000)
+		{
+			obstacle.avoid = false;
+			hal.console->printf_P(PSTR("Override Disabled"));
+		}
     }
 
-    read_serial();
+    else if (buff_cnt >= MSG_SIZE)
+    {
+    	if (parse_serial())
+    	{
+    		calculate_rpm();
+    	}
+    }
 }
 
-bool AC_LiDAR_RPLiDARSerial::read_serial()
+
+int AC_LiDAR_RPLiDARSerial::read_serial()
 {
-	buff_cnt = 0;
+	int buff_cnt = 0;
 
 	while (_port->available() > 0 && buff_cnt < BUFF_SIZE)
 	{
 		buff[buff_cnt] = _port->read();
-		buff_cnt++;
+		++buff_cnt;
 	}
 
-	if(buff_cnt >= 6)
+	return buff_cnt;
+}
+
+
+bool AC_LiDAR_RPLiDARSerial::parse_serial()
+{
+	if(buff[0] == '*' && buff [5] == '%') // If obstacle detected
 	{
-		if(buff[0] == '*' && buff[5] == '%') // If obstacle detected
-		{
+		memcpy(&(obstacle.direction), &buff[1], sizeof(float));
 
-			float obstacle_direction;
+		obstacle.last_time_ms = hal.scheduler->millis();
+		obstacle.avoid = true;
 
-			memcpy(&obstacle_direction, &buff[1], sizeof(float));
+		return true;
+	}
+	return false;
+}
 
+
+void AC_LiDAR_RPLiDARSerial::calculate_rpm()
+{
 	//		//Calculate new roll & pitch
 	//		const int neutral = 1500;
 	//		const int avoid_speed = 80;
@@ -63,16 +97,4 @@ bool AC_LiDAR_RPLiDARSerial::read_serial()
 	//
 	//		new_rc_roll = -sin(obstacle_direction) * avoid_speed + neutral;
 	//		new_rc_pitch = cos(obstacle_direction) * avoid_speed + neutral;
-
-			//new_rc_roll_slow = -sin(obstacle_direction) * avoid_speed_slow + neutral;
-			//new_rc_pitch_slow = cos(obstacle_direction) * avoid_speed_slow + neutral;
-
-			hal.console->printf_P(PSTR("\n %f \n"), obstacle_direction);
-
-	//		last_obstacle_time_ms = hal.scheduler->millis();
-	//
-	//		avoid_obstacle = true;
-		}
-	}
-	return true;
 }

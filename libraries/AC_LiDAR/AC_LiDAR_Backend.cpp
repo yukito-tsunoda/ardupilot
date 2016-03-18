@@ -5,7 +5,7 @@
  *      Author: moon
  */
 
-#include "../AC_LiDAR/AC_LiDAR_Backend.h"
+#include "AC_LiDAR_Backend.h"
 
 extern const AP_HAL::HAL& hal;
 

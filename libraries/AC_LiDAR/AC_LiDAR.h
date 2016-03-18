@@ -32,6 +32,15 @@ public:
         RangeFinder_TYPE_SITL= 2
     };
 
+    struct Obstacle {
+    	bool avoid;
+		float direction;
+		float distance;
+		uint32_t last_time_ms;
+
+		Obstacle(): avoid (false), direction (0.0), distance (10000), last_time_ms (0) {}
+    };
+
 	// init - detect and initialise all LiDARs
 	void init(const AP_SerialManager& serial_manager);
 	// update - give mount opportunity to update servos.  should be called at 10hz or higher
@@ -42,12 +51,18 @@ public:
 
     static const struct AP_Param::GroupInfo var_info[];
 
+    bool obstacle_avoid();
+	float obstacle_direction();
+	float obstacle_distance();
+	uint32_t obstacle_last_time_ms();
+	uint32_t obstacle_elapsed_time_ms();
+
 protected:
     // front end members
-    uint8_t             _num_instances;     // number of LiDARs instantiated
     uint8_t             _primary;           // primary LiDAR
+    uint8_t             _num_instances;     // number of LiDARs instantiated
     AC_LiDAR_Backend    *_backends[AC_LIDAR_MAX_INSTANCES];         // pointers to instantiated LiDARs
-
+    Obstacle obstacle;
 };
 
 #endif /* LIBRARIES_AC_LIDAR_AC_LIDAR_H_ */
