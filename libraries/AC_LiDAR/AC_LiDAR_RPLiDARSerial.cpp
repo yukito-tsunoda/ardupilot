@@ -17,13 +17,19 @@ AC_LiDAR_RPLiDARSerial::AC_LiDAR_RPLiDARSerial(AC_LiDAR &_frontend, uint8_t _ins
     _initialised(false)
 {}
 
-void AC_LiDAR_RPLiDARSerial::init(const AP_SerialManager& serial_manager)
+bool AC_LiDAR_RPLiDARSerial::init(const AP_SerialManager& serial_manager)
 {
     _port = serial_manager.find_serial(AP_SerialManager::SerialProtocol_Lidar, 0);
 
-	if (_port) {
-        _initialised = true;
-    }
+	if (_port)
+	{
+		_initialised = true;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 
@@ -44,17 +50,14 @@ void AC_LiDAR_RPLiDARSerial::update()
     	// Check if avoidance is currently active
 		if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 3000)
 		{
-			//obstacle.avoid = false;
-			hal.console->printf_P(PSTR("Override Disabled"));
+			obstacle.avoid = false;
+			//hal.console->printf_P(PSTR("Override Disabled"));
 		}
     }
 
     else if (buff_cnt >= MSG_SIZE)
     {
-    	if (parse_serial())
-    	{
-    		calculate_rpm();
-    	}
+    	parse_serial();
     }
 }
 
@@ -85,16 +88,4 @@ bool AC_LiDAR_RPLiDARSerial::parse_serial()
 		return true;
 	}
 	return false;
-}
-
-
-void AC_LiDAR_RPLiDARSerial::calculate_rpm()
-{
-	//		//Calculate new roll & pitch
-	//		const int neutral = 1500;
-	//		const int avoid_speed = 80;
-	//		const int avoid_speed_slow = 50;
-	//
-	//		new_rc_roll = -sin(obstacle_direction) * avoid_speed + neutral;
-	//		new_rc_pitch = cos(obstacle_direction) * avoid_speed + neutral;
 }

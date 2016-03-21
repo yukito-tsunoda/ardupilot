@@ -18,10 +18,9 @@ class AC_LiDAR_SITL: public AC_LiDAR_Backend {
 public:
 	AC_LiDAR_SITL(AC_LiDAR &_frontend,  uint8_t _instance, AC_LiDAR::Obstacle &_obstacle);
     // init - performs any required initialisation for this instance
-    virtual void init(const AP_SerialManager& serial_manager);
+    bool init(const AP_SerialManager& serial_manager);
 
-    // update mount position - should be called periodically
-    virtual void update();
+    void update();
 
     void update_sitl(const double scan[]);
     void detect_obstacle();

@@ -54,10 +54,6 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
     // check init has not been called before
     if (_num_instances != 0) 
         return;
-    
-
-    // primary is reset to the first instantiated mount
-    bool primary_set = false;
 
     // create each instance
     for (uint8_t instance=0; instance<AC_LIDAR_MAX_INSTANCES; instance++) {
@@ -78,13 +74,16 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
 
 		_num_instances++;
 
-		// init new instance
-        if (_backends[instance] != NULL) {
-            _backends[instance]->init(serial_manager);
-			if (!primary_set) {
-                _primary = instance;
-                primary_set = true;
-            }
+	    // primary is reset to the first instantiated mount
+	    bool primary_set = false;
+
+        if (_backends[instance] != NULL)
+        {
+			if(!primary_set && _backends[instance]->init(serial_manager))
+			{
+				_primary = instance;
+				primary_set = true;
+			}
         }
     }
 }
@@ -92,12 +91,11 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
 
 void AC_LiDAR::update()
 {
-    // update each instance
-    for (uint8_t instance=0; instance<AC_LIDAR_MAX_INSTANCES; instance++) {
-        if (_backends[instance] != NULL) {
-            _backends[instance]->update();
-        }
-    }
+    // update the primary instance only
+	if (_backends[_primary] != NULL)
+	{
+		_backends[_primary]->update();
+	}
 }
 
 
@@ -133,7 +131,9 @@ void AC_LiDAR::update_sitl(uint8_t instance, const double sitl_scan[])
 {
     if (_backends[instance]) 
     {
-       _backends[instance]->update_sitl(sitl_scan);
+    	// Set the primary instance to SITL
+    	_primary = instance;
+		_backends[instance]->update_sitl(sitl_scan);
     }
 }
 

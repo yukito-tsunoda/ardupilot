@@ -19,14 +19,13 @@ class AC_LiDAR_RPLiDARSerial: public AC_LiDAR_Backend {
 public:
 	AC_LiDAR_RPLiDARSerial(AC_LiDAR &_frontend,  uint8_t _instance, AC_LiDAR::Obstacle &_obstacle);
     // init - performs any required initialisation for this instance
-    void init(const AP_SerialManager& serial_manager);
+    bool init(const AP_SerialManager& serial_manager);
 
     // update mount position - should be called periodically
     void update();
 
     int read_serial();
     bool parse_serial();
-    void calculate_rpm();
 
     // This function is not used in this class
     void update_sitl(double const scan[]){hal.console->printf_P(PSTR("Override Disabled"));}

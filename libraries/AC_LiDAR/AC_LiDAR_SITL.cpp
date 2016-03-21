@@ -18,10 +18,12 @@ AC_LiDAR_SITL::AC_LiDAR_SITL(AC_LiDAR &_frontend, uint8_t _instance, AC_LiDAR::O
 {
 }
 
-void AC_LiDAR_SITL::init(const AP_SerialManager& serial_manager)
+bool AC_LiDAR_SITL::init(const AP_SerialManager& serial_manager)
 {
     for (int i=0; i<SITL_SCAN_SIZE; ++i)
         scan[i] = 10000.0;
+
+    return false;
 }
 
 void AC_LiDAR_SITL::update()

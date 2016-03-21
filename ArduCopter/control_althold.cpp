@@ -51,6 +51,9 @@ void Copter::althold_run()
 
         set_rpm_to_avoid(new_roll, new_pitch);
 
+        //hal.console->printf_P(PSTR("%d %d\n"), new_roll, new_pitch);
+        //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
+
 		//::printf("%d %d\n", new_roll, new_pitch);
         //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());		
     }
