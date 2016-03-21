@@ -27,6 +27,8 @@ public:
     // update mount position - should be called periodically
     virtual void update() = 0;
 
+    virtual void update_sitl(const double scans[]) {}
+
 protected:
     AC_LiDAR    &frontend; // reference to the front end which holds parameters
     uint8_t     instance;  // this instance's number

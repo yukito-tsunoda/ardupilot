@@ -13,6 +13,7 @@
 
 #define BUFF_SIZE 128
 #define MSG_SIZE 6
+ extern const AP_HAL::HAL& hal;
 
 class AC_LiDAR_RPLiDARSerial: public AC_LiDAR_Backend {
 public:
@@ -26,6 +27,9 @@ public:
     int read_serial();
     bool parse_serial();
     void calculate_rpm();
+
+    // This function is not used in this class
+    void update_sitl(double const scan[]){hal.console->printf_P(PSTR("Override Disabled"));}
 
 protected:
 

@@ -44,7 +44,7 @@ void AC_LiDAR_RPLiDARSerial::update()
     	// Check if avoidance is currently active
 		if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 3000)
 		{
-			obstacle.avoid = false;
+			//obstacle.avoid = false;
 			hal.console->printf_P(PSTR("Override Disabled"));
 		}
     }

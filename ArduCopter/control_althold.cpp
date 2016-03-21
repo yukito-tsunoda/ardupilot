@@ -41,38 +41,18 @@ void Copter::althold_run()
     // apply SIMPLE mode transform to pilot inputs
     update_simple_mode();
 
-
 //-------------------------------------------------
-
     // TODO: Check if lidar is initialized
     if(lidar.obstacle_avoid())
     {
+		int new_roll, new_pitch;
 
-        //hal.console->printf_P(PSTR("\n\n%f %d"),lidar.obstacle_direction(), lidar.obstacle_elapsed_time_ms());
+        lidar.calculate_roll_n_pitch(new_roll, new_pitch);
 
-    	/*
-		int min_idx = 0;
+        set_rpm_to_avoid(new_roll, new_pitch);
 
-		for(int i=0; i<180; ++i)
-		{
-			if(lidar_scan[i] < lidar_scan[min_idx])
-				min_idx = i;
-		}
-
-		if(lidar_scan[min_idx] < 2)
-		{
-			int neutral = 1500;
-			int speed = 80;
-
-			min_idx = - (min_idx - 90);
-
-			int new_roll = -sin(min_idx/180.0 * 3.1416) * speed + neutral;
-			int new_pitch = cos(min_idx/180.0 * 3.1416) * speed + neutral;
-			set_rpm_to_avoid(new_roll, new_pitch);
-
-			//::printf("!! %d %d %d \n",min_idx, new_roll, new_pitch);
-		}
-		*/
+		//::printf("%d %d\n", new_roll, new_pitch);
+        //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());		
     }
 //-------------------------------------------------
 

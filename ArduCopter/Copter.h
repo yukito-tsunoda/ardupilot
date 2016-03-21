@@ -200,7 +200,6 @@ private:
 
 #if CONFIG_LIDAR == ENABLED
     AC_LiDAR lidar{serial_manager};
-    //AC_LiDAR lidar;
 #endif
 
     // gnd speed limit required to observe optical flow sensor limits
@@ -379,8 +378,6 @@ private:
 #if FRSKY_TELEM_ENABLED == ENABLED
     AP_Frsky_Telem frsky_telemetry;
 #endif
-
-    double lidar_scan[180];
 
     // Altitude
     // The cm/s we are moving up or down based on filtered data - Positive = UP

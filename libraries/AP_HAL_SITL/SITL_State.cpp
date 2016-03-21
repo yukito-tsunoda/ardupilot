@@ -81,6 +81,7 @@ void SITL_State::_sitl_setup(void)
     _terrain = (AP_Terrain *)AP_Param::find_object("TERRAIN_");
     _optical_flow = (OpticalFlow *)AP_Param::find_object("FLOW");
     _range_finder = (RangeFinder *)AP_Param::find_object("RNGFND");
+    _lidar = (AC_LiDAR *)AP_Param::find_object("LDR");
 
     if (_sitl != NULL) {
         // setup some initial values

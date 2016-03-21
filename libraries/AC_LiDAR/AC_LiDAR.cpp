@@ -14,7 +14,18 @@
 extern const AP_HAL::HAL& hal;
 
  // table of user settable parameters
-const AP_Param::GroupInfo AC_LiDAR::var_info[] = {};
+// table of user settable parameters
+const AP_Param::GroupInfo AC_LiDAR::var_info[] PROGMEM = {
+    // @Param: _TYPE
+    // @DisplayName: LiDAR type
+    // @Description: LiDAR type
+    // @Values: 0:None,1:AUTO,2:RPLiDAR,3:HIL
+    // @RebootRequired: True
+    // @User: Standard
+    AP_GROUPINFO("_TYPE",    0, AC_LiDAR, _type[0], 0),
+    
+    AP_GROUPEND
+};
 
 AC_LiDAR::AC_LiDAR()
 {
@@ -41,9 +52,9 @@ AC_LiDAR::AC_LiDAR(AP_SerialManager &_serial_manager) :
 void AC_LiDAR::init(const AP_SerialManager& serial_manager)
 {
     // check init has not been called before
-    if (_num_instances != 0) {
+    if (_num_instances != 0) 
         return;
-    }
+    
 
     // primary is reset to the first instantiated mount
     bool primary_set = false;
@@ -51,8 +62,20 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
     // create each instance
     for (uint8_t instance=0; instance<AC_LIDAR_MAX_INSTANCES; instance++) {
 
-    	// TODO: Pass the obstacle instance to only the primary LiDAR
-		_backends[instance] = new AC_LiDAR_RPLiDARSerial(*this, instance, obstacle);
+    	switch(instance)
+        {
+            case 0 :
+                _backends[instance] = new AC_LiDAR_RPLiDARSerial(*this, instance, obstacle);
+            break;
+
+            case 1 :
+                _backends[instance] = new AC_LiDAR_SITL(*this, instance, obstacle);
+            break;
+
+            default :
+                _backends[instance] = NULL;
+        }
+
 		_num_instances++;
 
 		// init new instance
@@ -65,6 +88,7 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
         }
     }
 }
+
 
 void AC_LiDAR::update()
 {
@@ -103,4 +127,21 @@ uint32_t AC_LiDAR::obstacle_last_time_ms()
 uint32_t AC_LiDAR::obstacle_elapsed_time_ms()
 {
 	return abs(hal.scheduler->millis() - obstacle.last_time_ms);
+}
+
+void AC_LiDAR::update_sitl(uint8_t instance, const double sitl_scan[])
+{
+    if (_backends[instance]) 
+    {
+       _backends[instance]->update_sitl(sitl_scan);
+    }
+}
+
+void AC_LiDAR::calculate_roll_n_pitch(int &new_roll, int &new_pitch)
+{
+    const int RPM_NEUTRAL = 1500;
+    const int RPM_OFFSET = 80;
+
+    new_roll = -sin(obstacle_direction()) * RPM_OFFSET + RPM_NEUTRAL;
+    new_pitch = cos(obstacle_direction()) * RPM_OFFSET + RPM_NEUTRAL;
 }

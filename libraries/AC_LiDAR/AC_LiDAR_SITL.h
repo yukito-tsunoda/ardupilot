@@ -11,6 +11,9 @@
 #include "AC_LiDAR_Backend.h"
 #include <AP_HAL/AP_HAL.h>
 
+#define SITL_SCAN_SIZE 180
+#define DISTANCE_TO_AVOID 2.0
+
 class AC_LiDAR_SITL: public AC_LiDAR_Backend {
 public:
 	AC_LiDAR_SITL(AC_LiDAR &_frontend,  uint8_t _instance, AC_LiDAR::Obstacle &_obstacle);
@@ -20,12 +23,16 @@ public:
     // update mount position - should be called periodically
     virtual void update();
 
+    void update_sitl(const double scan[]);
+    void detect_obstacle();
+
 private:
     // internal variables
     AP_HAL::UARTDriver *_port;
     bool _initialised;              // true once the driver has been initialised
 
-
+    double scan[SITL_SCAN_SIZE];
+    
 };
 
 #endif /* LIBRARIES_AC_LIDAR_AC_LiDAR_SITL_H_ */

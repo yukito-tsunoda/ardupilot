@@ -11,7 +11,7 @@
 #include <AP_SerialManager/AP_SerialManager.h>
 
 // maximum number of LiDAR
-#define AC_LIDAR_MAX_INSTANCES    1
+#define AC_LIDAR_MAX_INSTANCES    2
 
 class AC_LiDAR_Backend;
 class AC_LiDAR_RPLiDARSerial;
@@ -43,19 +43,24 @@ public:
 
 	// init - detect and initialise all LiDARs
 	void init(const AP_SerialManager& serial_manager);
+
 	// update - give mount opportunity to update servos.  should be called at 10hz or higher
 	void update();
 
 	// support for SITL
-    void setSITL(uint8_t instance, const struct LiDAR_State &state);
+    void update_sitl(uint8_t instance, const double sitl_scan[]);
 
     static const struct AP_Param::GroupInfo var_info[];
+
+    AP_Int8  _type[AC_LIDAR_MAX_INSTANCES];
 
     bool obstacle_avoid();
 	float obstacle_direction();
 	float obstacle_distance();
 	uint32_t obstacle_last_time_ms();
 	uint32_t obstacle_elapsed_time_ms();
+
+	void calculate_roll_n_pitch(int &new_roll, int &new_pitch);
 
 protected:
     // front end members

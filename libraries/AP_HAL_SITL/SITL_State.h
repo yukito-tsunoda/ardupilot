@@ -19,6 +19,7 @@
 #include <AP_Baro/AP_Baro.h>
 #include <AP_InertialSensor/AP_InertialSensor.h>
 #include <AP_Compass/Compass.h>
+#include <AC_LiDAR/AC_LiDAR.h>
 #include <AP_RangeFinder/AP_RangeFinder.h>
 #include <AP_OpticalFlow/AP_OpticalFlow.h>
 #include <AP_Terrain/AP_Terrain.h>
@@ -142,6 +143,7 @@ private:
     AP_InertialSensor *_ins;
     SITLScheduler *_scheduler;
     Compass *_compass;
+    AC_LiDAR *_lidar;
     OpticalFlow *_optical_flow;
     RangeFinder *_range_finder;
     AP_Terrain *_terrain;
