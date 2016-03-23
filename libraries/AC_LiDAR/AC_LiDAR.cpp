@@ -65,11 +65,11 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
         {
             case 0 :
                 _backends[instance] = new AC_LiDAR_RPLiDARSerial(*this, instance, obstacle);
-            break;
+                break;
 
             case 1 :
                 _backends[instance] = new AC_LiDAR_SITL(*this, instance, obstacle);
-            break;
+                break;
 
             default :
                 _backends[instance] = NULL;
