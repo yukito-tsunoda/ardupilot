@@ -10,6 +10,10 @@
 
 extern const AP_HAL::HAL& hal;
 
+#include <stdio.h>
+
+#define MIN_SCAN_RANGE 0.5
+
 
 AC_LiDAR_SITL::AC_LiDAR_SITL(AC_LiDAR &_frontend, uint8_t _instance, AC_LiDAR::Obstacle &_obstacle):
 	AC_LiDAR_Backend(_frontend, _instance, _obstacle),
@@ -44,20 +48,28 @@ void AC_LiDAR_SITL::update_sitl(const double _scan[])
 void AC_LiDAR_SITL::detect_obstacle()
 {
     int min_index = 0;
+    double min_range = DISTANCE_TO_AVOID;
 
     for (int i=0; i<SITL_SCAN_SIZE; ++i)
     {
-        if (scan[i] < scan[min_index])
+        if (scan[i] < min_range && scan[i] > MIN_SCAN_RANGE)
+        {
+            min_range = scan[i];
             min_index = i;
+        }
+        printf("+%d %f " ,i, scan[i]);
     }
+    printf("\n\n\n");
 
-    if (scan[min_index] < DISTANCE_TO_AVOID)
+    if (min_range < DISTANCE_TO_AVOID)
     {
-        int degree = -min_index + 90; 
+        int degree = -min_index + (SITL_SCAN_SIZE/2); 
         obstacle.direction = degree / 180.0 * M_PI;
-        obstacle.distance = degree;//scan[min_index];
+        obstacle.distance = scan[min_index];
         obstacle.last_time_ms = hal.scheduler->millis();
-        obstacle.avoid = true;     
+        obstacle.avoid = true;
+
+        printf("%d %f ", degree, scan[min_index]);
     }
 
     else

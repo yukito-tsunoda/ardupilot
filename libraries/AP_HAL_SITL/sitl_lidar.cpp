@@ -37,6 +37,9 @@ void SITL_State::_update_lidar(double *lidar_scan)
     }
 
     _lidar->update_sitl(LIDAR_SITL_INST, lidar_scan);
+
+    //for(int i=0; i<270; ++i)
+      //printf("%f ", lidar_scan[i]);
 }
 
 

@@ -270,7 +270,7 @@ void Gazebo::recv_fdm(const struct sitl_input &input)
     // ...
     // ---------------------------------------
 
-    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+    for(int i=0; i<LIDAR_SCAN_SIZE; ++i)
         lidar_scan[i] = pkt.lidar_scan[i];
 
     // auto-adjust to simulation frame rate
@@ -371,7 +371,7 @@ void Gazebo::fill_fdm_extras(struct sitl_fdm_extras &fdm_extras) const
 
     fdm_extras.magic = FDM_EXTRAS_MAGIC;
 
-    for(int i=0; i<LIDAR_NUM_RAY; ++i)
+    for(int i=0; i<LIDAR_SCAN_SIZE; ++i)
         fdm_extras.lidar[i] = lidar_scan[i];
 }
 
