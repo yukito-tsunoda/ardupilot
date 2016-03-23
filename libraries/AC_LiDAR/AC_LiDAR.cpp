@@ -59,8 +59,8 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
         return;
 
     // create each instance
-    for (uint8_t instance=0; instance<AC_LIDAR_MAX_INSTANCES; instance++) {
-
+    for (uint8_t instance=0; instance<AC_LIDAR_MAX_INSTANCES; instance++)
+    {
     	switch(instance)
         {
             case 0 :

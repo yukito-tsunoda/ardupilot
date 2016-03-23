@@ -42,29 +42,32 @@ void AC_LiDAR_RPLiDARSerial::update()
 
     int buff_cnt = read_serial();
 
+    if (buff_cnt >= MSG_SIZE)
+    {
+        parse_serial();
+    }
+
     if (obstacle.avoid)
     {
-    	// Clear buffer
-    	memset(buff, 0, sizeof(buff));
-
     	// Check if avoidance is currently active
-		if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 3000)
+		if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 100)
 		{
 			obstacle.avoid = false;
 			//hal.console->printf_P(PSTR("Override Disabled"));
 		}
+
     }
 
-    else if (buff_cnt >= MSG_SIZE)
-    {
-    	parse_serial();
-    }
+
 }
 
 
 int AC_LiDAR_RPLiDARSerial::read_serial()
 {
 	int buff_cnt = 0;
+
+	// Clear buffer
+	memset(buff, 0, sizeof(buff));
 
 	while (_port->available() > 0 && buff_cnt < BUFF_SIZE)
 	{
