@@ -57,9 +57,7 @@ void AC_LiDAR_SITL::detect_obstacle()
             min_range = scan[i];
             min_index = i;
         }
-        printf("+%d %f " ,i, scan[i]);
     }
-    printf("\n\n\n");
 
     if (min_range < DISTANCE_TO_AVOID)
     {
@@ -68,8 +66,6 @@ void AC_LiDAR_SITL::detect_obstacle()
         obstacle.distance = scan[min_index];
         obstacle.last_time_ms = hal.scheduler->millis();
         obstacle.avoid = true;
-
-        printf("%d %f ", degree, scan[min_index]);
     }
 
     else
