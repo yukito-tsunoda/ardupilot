@@ -34,6 +34,9 @@ AC_LiDAR::AC_LiDAR()
     {
         _backends[i] = NULL;
     }
+
+    override_roll = RPM_NEUTRAL;
+    override_pitch = RPM_NEUTRAL;
 }
 
 AC_LiDAR::AC_LiDAR(AP_SerialManager &_serial_manager) :
@@ -137,11 +140,28 @@ void AC_LiDAR::update_sitl(uint8_t instance, const double sitl_scan[])
     }
 }
 
-void AC_LiDAR::calculate_roll_n_pitch(int &new_roll, int &new_pitch)
+void AC_LiDAR::calculate_roll_n_pitch()
 {
-    const int RPM_NEUTRAL = 1500;
-    const int RPM_OFFSET = 80;
+    override_roll = -sin(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
+    override_pitch = cos(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
+}
 
-    new_roll = -sin(obstacle_direction()) * RPM_OFFSET + RPM_NEUTRAL;
-    new_pitch = cos(obstacle_direction()) * RPM_OFFSET + RPM_NEUTRAL;
+int AC_LiDAR::get_override_roll()
+{
+    return override_roll;
+}
+
+int AC_LiDAR::get_override_pitch()
+{
+    return override_pitch;
+}
+
+int AC_LiDAR::get_counter_roll()
+{
+    return RPM_NEUTRAL + RPM_COEFFICIENT * (RPM_NEUTRAL - override_roll);
+}
+
+int AC_LiDAR::get_counter_pitch()
+{
+    return RPM_NEUTRAL + RPM_COEFFICIENT * (RPM_NEUTRAL - override_pitch);
 }

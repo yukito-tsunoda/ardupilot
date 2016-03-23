@@ -13,6 +13,10 @@
 // maximum number of LiDAR
 #define AC_LIDAR_MAX_INSTANCES    2
 
+#define RPM_NEUTRAL 1500
+#define RPM_OFFSET 120
+#define RPM_COEFFICIENT 1.0
+
 class AC_LiDAR_Backend;
 class AC_LiDAR_RPLiDARSerial;
 
@@ -38,7 +42,7 @@ public:
 		float distance;
 		uint32_t last_time_ms;
 
-		Obstacle(): avoid (false), direction (0.0), distance (10000), last_time_ms (0) {}
+		Obstacle(): avoid (false), direction (0.0), distance (10000), last_time_ms (0){}
     };
 
 	// init - detect and initialise all LiDARs
@@ -60,7 +64,11 @@ public:
 	uint32_t obstacle_last_time_ms();
 	uint32_t obstacle_elapsed_time_ms();
 
-	void calculate_roll_n_pitch(int &new_roll, int &new_pitch);
+	void calculate_roll_n_pitch();
+	int get_override_roll();
+	int get_override_pitch();
+	int get_counter_roll();
+	int get_counter_pitch();
 
 protected:
     // front end members
@@ -68,6 +76,9 @@ protected:
     uint8_t             _num_instances;     // number of LiDARs instantiated
     AC_LiDAR_Backend    *_backends[AC_LIDAR_MAX_INSTANCES];         // pointers to instantiated LiDARs
     Obstacle obstacle;
+private:
+	int override_roll;
+	int override_pitch;
 };
 
 #endif /* LIBRARIES_AC_LIDAR_AC_LIDAR_H_ */
