@@ -39,8 +39,6 @@ int16_t Copter::read_sonar(void)
 #if CONFIG_SONAR == ENABLED
     sonar.update();
 
-    read_sonar_front();
-
     // exit immediately if sonar is disabled
     if (sonar.status() != RangeFinder::RangeFinder_Good) {
         sonar_alt_health = 0;
