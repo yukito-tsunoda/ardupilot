@@ -175,6 +175,14 @@ RC_Channel::set_pwm_all(void)
     }
 }
 
+void
+RC_Channel::set_pwm_rnp(int16_t roll, int16_t pitch)
+{
+    rc_ch[0]->set_pwm(roll);
+    rc_ch[1]->set_pwm(pitch);
+
+}
+
 // read input from APM_RC - create a control_in value, but use a 
 // zero value for the dead zone. When done this way the control_in
 // value can be used as servo_out to give the same output as input

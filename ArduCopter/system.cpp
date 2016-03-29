@@ -245,6 +245,11 @@ void Copter::init_ardupilot()
     init_sonar();
 #endif
 
+    // initialise sonar
+#if CONFIG_LIDAR == ENABLED
+    init_lidar();
+#endif
+
     // initialise AP_RPM library
     rpm_sensor.init();
 

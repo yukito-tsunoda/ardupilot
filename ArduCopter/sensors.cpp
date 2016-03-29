@@ -69,6 +69,17 @@ int16_t Copter::read_sonar(void)
 #endif
 }
 
+#if CONFIG_LIDAR == ENABLED
+void Copter::init_lidar(void)
+{
+	lidar.init(serial_manager);
+}
+
+void Copter::read_lidar(void)
+{
+	lidar.update();
+}
+#endif
 /*
   update RPM sensors
  */
