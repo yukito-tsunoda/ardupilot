@@ -180,7 +180,12 @@ RC_Channel::set_pwm_rnp(int16_t roll, int16_t pitch)
 {
     rc_ch[0]->set_pwm(roll);
     rc_ch[1]->set_pwm(pitch);
+}
 
+int16_t
+RC_Channel::get_rc_ch(int16_t ch)
+{
+    return rc_ch[ch]->read();
 }
 
 // read input from APM_RC - create a control_in value, but use a 

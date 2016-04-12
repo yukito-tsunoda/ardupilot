@@ -131,6 +131,16 @@ void Copter::set_rpm_to_avoid(int16_t roll, int16_t pitch)
     RC_Channel::set_pwm_rnp(roll, pitch);
 }
 
+int16_t Copter::get_rc_roll()
+{
+    return RC_Channel::get_rc_ch(0);
+}
+
+int16_t Copter::get_rc_pitch()
+{
+    return RC_Channel::get_rc_ch(1);
+}
+
 #define FS_COUNTER 3        // radio failsafe kicks in after 3 consecutive throttle values below failsafe_throttle_value
 void Copter::set_throttle_and_failsafe(uint16_t throttle_pwm)
 {

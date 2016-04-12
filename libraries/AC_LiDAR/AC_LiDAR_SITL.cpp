@@ -48,7 +48,7 @@ void AC_LiDAR_SITL::update_sitl(const double _scan[])
 void AC_LiDAR_SITL::detect_obstacle()
 {
     int min_index = 0;
-    double min_range = DISTANCE_TO_AVOID;
+    double min_range = 10000;
 
     for (int i=0; i<SITL_SCAN_SIZE; ++i)
     {
@@ -59,15 +59,29 @@ void AC_LiDAR_SITL::detect_obstacle()
         }
     }
 
-    if (min_range < DISTANCE_TO_AVOID)
+    if (min_range < DISTANCE_TO_WITHDRAW)
     {
         int degree = -min_index + (SITL_SCAN_SIZE/2); 
         obstacle.direction = degree / 180.0 * M_PI;
         obstacle.distance = scan[min_index];
         obstacle.last_time_ms = hal.scheduler->millis();
         obstacle.avoid = true;
+        obstacle.disregard = false;
+    }
+
+    else if (min_range < DISTANCE_TO_DISREGARD)
+    {
+        int degree = -min_index + (SITL_SCAN_SIZE/2); 
+        obstacle.direction = degree / 180.0 * M_PI;
+        obstacle.distance = scan[min_index];
+        //obstacle.last_time_ms = hal.scheduler->millis();
+        obstacle.avoid = false;
+        obstacle.disregard = true;
     }
 
     else
+    {
         obstacle.avoid = false;
+        obstacle.disregard = false;
+    }
 }

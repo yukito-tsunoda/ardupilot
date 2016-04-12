@@ -38,11 +38,12 @@ public:
 
     struct Obstacle {
     	bool avoid;
+    	bool disregard;
 		float direction;
 		float distance;
 		uint32_t last_time_ms;
 
-		Obstacle(): avoid (false), direction (0.0), distance (10000), last_time_ms (0){}
+		Obstacle(): avoid (false), disregard (false), direction (0.0), distance (10000), last_time_ms (0){}
     };
 
 	// init - detect and initialise all LiDARs
@@ -59,12 +60,14 @@ public:
     AP_Int8  _type[AC_LIDAR_MAX_INSTANCES];
 
     bool obstacle_avoid();
+    bool obstacle_disregard();
 	float obstacle_direction();
 	float obstacle_distance();
 	uint32_t obstacle_last_time_ms();
 	uint32_t obstacle_elapsed_time_ms();
 
 	void calculate_roll_n_pitch();
+
 	int get_override_roll();
 	int get_override_pitch();
 	int get_counter_roll();

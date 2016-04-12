@@ -34,8 +34,8 @@ bool Copter::althold_init(bool ignore_checks)
 // althold_run - runs the althold controller
 // should be called at 100hz or more
 
-int break_count = 0;
-const int break_rate = 3;
+//int break_count = 0;
+//const int break_rate = 2.5;
 
 void Copter::althold_run()
 {
@@ -46,17 +46,23 @@ void Copter::althold_run()
     update_simple_mode();
 
 //-------------------------------------------------
+/*
     // TODO: Check if lidar is initialized
     if (lidar.obstacle_avoid())
     {
-        lidar.calculate_roll_n_pitch();
-        set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());	
         
+        //if (break_count < 100) 
+        //    lidar.calculate_roll_n_pitch2();    	
+        //else
+            lidar.calculate_roll_n_pitch();
+            
+        set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());        
+
         break_count++;
 
-        hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
-        hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
-        //::printf("%d %d\n", new_roll, new_pitch);
+        //hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
+        //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
+        ::printf("%d %d\n", lidar.get_override_roll(), lidar.get_override_pitch());
         //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());	
     }
     
@@ -72,6 +78,7 @@ void Copter::althold_run()
             //::printf("%d ", break_count);
         }
     }
+*/
 //-------------------------------------------------
 
     // get pilot desired lean angles

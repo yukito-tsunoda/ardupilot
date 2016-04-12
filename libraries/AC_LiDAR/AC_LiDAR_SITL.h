@@ -12,7 +12,8 @@
 #include <AP_HAL/AP_HAL.h>
 
 #define SITL_SCAN_SIZE 270
-#define DISTANCE_TO_AVOID 2.0
+#define DISTANCE_TO_WITHDRAW 2.0
+#define DISTANCE_TO_DISREGARD 2.5
 
 class AC_LiDAR_SITL: public AC_LiDAR_Backend {
 public:

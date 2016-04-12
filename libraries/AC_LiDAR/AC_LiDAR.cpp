@@ -107,6 +107,11 @@ bool AC_LiDAR::obstacle_avoid()
 	return obstacle.avoid;
 }
 
+bool AC_LiDAR::obstacle_disregard()
+{
+    return obstacle.disregard;
+}
+
 
 float AC_LiDAR::obstacle_direction()
 {

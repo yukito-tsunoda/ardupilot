@@ -68,6 +68,7 @@ public:
     void        set_pwm(int16_t pwm);
     static void set_pwm_all(void);
     static void set_pwm_rnp(int16_t roll, int16_t pitch);
+    static int16_t get_rc_ch(int16_t ch);
     void        set_pwm_no_deadzone(int16_t pwm);
 
     // return a limit PWM value
