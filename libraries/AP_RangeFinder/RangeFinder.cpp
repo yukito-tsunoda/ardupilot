@@ -615,10 +615,3 @@ void RangeFinder::update_pre_arm_check(uint8_t instance)
         state[instance].pre_arm_check = true;
     }
 }
-
-void RangeFinder::setHIL(uint8_t instance, const struct RangeFinder_State &state_)
-{
-   if (drivers[instance]) {
-       drivers[instance]->_update_frontend(instance, state_);
-    }
-}

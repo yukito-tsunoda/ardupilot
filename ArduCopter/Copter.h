@@ -84,7 +84,6 @@
 #include <AP_InertialNav/AP_InertialNav.h>     // ArduPilot Mega inertial navigation library
 #include <AC_WPNav/AC_WPNav.h>           // ArduCopter waypoint navigation library
 #include <AC_WPNav/AC_Circle.h>          // circle navigation library
-#include <AC_WPNav/AC_WallNav.h> 
 #include <AP_Declination/AP_Declination.h>     // ArduPilot Mega Declination Helper Library
 #include <AC_Fence/AC_Fence.h>           // Arducopter Fence library
 #include <SITL/SITL.h>               // software in the loop support
@@ -435,8 +434,6 @@ private:
     AC_PosControl pos_control;
     AC_WPNav wp_nav;
     AC_Circle circle_nav;
-
-    AC_WallNav wall_nav;
 
     // Performance monitoring
     int16_t pmTest1;

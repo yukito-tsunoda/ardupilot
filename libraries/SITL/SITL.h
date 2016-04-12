@@ -9,6 +9,8 @@
 #include <GCS_MAVLink/GCS_MAVLink.h>
 #include <DataFlash/DataFlash.h>
 
+#define LIDAR_SCAN_SIZE 270
+
 struct PACKED sitl_fdm {
     // this is the packet sent by the simulator
     // to the APM executable to update the simulator state

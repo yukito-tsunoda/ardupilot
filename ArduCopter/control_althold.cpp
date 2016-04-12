@@ -62,7 +62,11 @@ void Copter::althold_run()
 
         //hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
         //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
+<<<<<<< HEAD
         ::printf("%d %d\n", lidar.get_override_roll(), lidar.get_override_pitch());
+=======
+        //::printf("%d %d\n", new_roll, new_pitch);
+>>>>>>> 0d446cee620eeda18261aaf0c93cb6a826f9ead2
         //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());	
     }
     
@@ -76,6 +80,7 @@ void Copter::althold_run()
             if (break_count < 0)
                 break_count = 0;
             //::printf("%d ", break_count);
+            //hal.console->printf_P(PSTR("%d "), break_count);
         }
     }
 */
