@@ -50,6 +50,17 @@ void Copter::loiter_run()
         // apply SIMPLE mode transform to pilot inputs
         update_simple_mode();
 
+        if (lidar.obstacle_avoid())
+        {
+            lidar.calculate_roll_n_pitch();
+            set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());
+
+            //hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
+            //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
+            //::printf("%d %d\n", new_roll, new_pitch);
+            //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());
+        }
+
         // process pilot's roll and pitch input
         wp_nav.set_pilot_desired_acceleration(channel_roll->control_in, channel_pitch->control_in);
 

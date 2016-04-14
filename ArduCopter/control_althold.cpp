@@ -45,36 +45,6 @@ void Copter::althold_run()
     // apply SIMPLE mode transform to pilot inputs
     update_simple_mode();
 
-//-------------------------------------------------
-    // TODO: Check if lidar is initialized
-    if (lidar.obstacle_avoid())
-    {
-        lidar.calculate_roll_n_pitch();
-        set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());	
-        
-        break_count++;
-
-        hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
-        hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
-        //::printf("%d %d\n", new_roll, new_pitch);
-        //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());	
-    }
-    
-    else // Apply counter rpm to break
-    {
-        if (break_count > 0) 
-        {
-            set_rpm_to_avoid(lidar.get_counter_roll(), lidar.get_counter_pitch());
-            break_count -= break_rate;
-
-            if (break_count < 0)
-                break_count = 0;
-            //::printf("%d ", break_count);
-            //hal.console->printf_P(PSTR("%d "), break_count);
-        }
-    }
-//-------------------------------------------------
-
     // get pilot desired lean angles
     float target_roll, target_pitch;
     get_pilot_desired_lean_angles(channel_roll->control_in, channel_pitch->control_in, target_roll, target_pitch);
