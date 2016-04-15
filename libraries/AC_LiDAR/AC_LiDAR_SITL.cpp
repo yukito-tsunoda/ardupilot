@@ -65,7 +65,7 @@ void AC_LiDAR_SITL::detect_obstacle()
         obstacle.direction = degree / 180.0 * M_PI;
         obstacle.distance = scan[min_index];
         obstacle.last_time_ms = hal.scheduler->millis();
-        obstacle.avoid = true;
+        obstacle.withdraw = true;
         obstacle.disregard = false;
     }
 
@@ -75,13 +75,13 @@ void AC_LiDAR_SITL::detect_obstacle()
         obstacle.direction = degree / 180.0 * M_PI;
         obstacle.distance = scan[min_index];
         //obstacle.last_time_ms = hal.scheduler->millis();
-        obstacle.avoid = false;
+        obstacle.withdraw = false;
         obstacle.disregard = true;
     }
 
     else
     {
-        obstacle.avoid = false;
+        obstacle.withdraw = false;
         obstacle.disregard = false;
     }
 }

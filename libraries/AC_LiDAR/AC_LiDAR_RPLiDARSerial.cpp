@@ -44,21 +44,17 @@ void AC_LiDAR_RPLiDARSerial::update()
 
     if (buff_cnt >= MSG_SIZE)
     {
-        parse_serial();
+        if (parse_serial())
+        	obstacle.last_time_ms = hal.scheduler->millis();
     }
 
-    if (obstacle.avoid)
-    {
-    	// Check if avoidance is currently active
-		if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 100)
-		{
-			obstacle.avoid = false;
-			//hal.console->printf_P(PSTR("Override Disabled"));
-		}
-
-    }
-
-
+	// Disactivate if not receiving a packet for 300ms
+	if (abs(hal.scheduler->millis() - obstacle.last_time_ms) > 300)
+	{
+		obstacle.withdraw = false;
+		obstacle.disregard = false;
+		//hal.console->printf_P(PSTR("Override Disabled"));
+	}
 }
 
 
@@ -81,14 +77,40 @@ int AC_LiDAR_RPLiDARSerial::read_serial()
 
 bool AC_LiDAR_RPLiDARSerial::parse_serial()
 {
-	if(buff[0] == '*' && buff [5] == '%') // If obstacle detected
+	/*
+	 *	protocol:
+	 *		char flag			// 'c' is clear, 'd' is disregard, and 'w' is withdraw
+	 *	 	float direction		// in radian
+	 *	 	float distance		// in meter
+	 *	 	char '%'
+	 */
+
+	if (buff [MSG_SIZE-1] == '%')
 	{
 		memcpy(&(obstacle.direction), &buff[1], sizeof(float));
+		memcpy(&(obstacle.distance), &buff[5], sizeof(float));
 
-		obstacle.last_time_ms = hal.scheduler->millis();
-		obstacle.avoid = true;
+		hal.console->printf_P(PSTR("%c %f %f \n"), buff[0], obstacle.direction, obstacle.distance);
 
-		return true;
+		switch (buff[0])
+		{
+			case 'c':
+				obstacle.withdraw = false;
+				obstacle.disregard = false;
+				return true;
+
+			case 'd':
+				obstacle.disregard = true;
+				obstacle.withdraw = false;
+				return true;
+
+			case 'w':
+				obstacle.disregard = false;
+				obstacle.withdraw = true;
+				return true;
+
+			default:
+				return false;
+		}
 	}
-	return false;
 }

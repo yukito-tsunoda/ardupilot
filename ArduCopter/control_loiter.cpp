@@ -52,9 +52,8 @@ void Copter::loiter_run()
 
         //-------------------------------------------------
             // TODO: Check if lidar is initialized
-            if (lidar.obstacle_avoid())
+            if (lidar.withdraw_from_obstacle())
             {
-
                 lidar.calculate_roll_n_pitch();
 
                 set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());
@@ -65,35 +64,17 @@ void Copter::loiter_run()
                 //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());
             }
 
-            else if(lidar.obstacle_disregard())
-            {
-                float pi =  3.14159;
-                
-                float x1 = sin(lidar.obstacle_direction() - pi/2);
-                float y1 = cos(lidar.obstacle_direction() - pi/2);
 
+            else if (lidar.disregard_pilot_input( get_rc_roll(), get_rc_pitch() ))
+			{
+				set_rpm_to_avoid(1500, 1500);
+				//::printf("%d %d %f\n", get_rc_roll(), get_rc_pitch(), lidar.obstacle_direction());
+			}
 
-                float x2 = sin(lidar.obstacle_direction() + pi/2);
-                float y2 = cos(lidar.obstacle_direction() + pi/2);
-
-                float rc_in_x = float(get_rc_roll() - 1500);
-                float rc_in_y = float(-(get_rc_pitch() - 1500));
-              
-                int rc_direction = rc_in_x * (y1-y2) + x1 * (y2-rc_in_y) + x2 * (rc_in_y-y1);
-                int obstacle_side = sin(lidar.obstacle_direction()) * (y1-y2) + x1 * (y2-cos(lidar.obstacle_direction())) + x2 * (cos(lidar.obstacle_direction())-y1);
-
-                if( (rc_direction > 0 && obstacle_side > 0) || (rc_direction < 0 && obstacle_side < 0) )
-                {
-                    set_rpm_to_avoid(1500, 1500);
-                    ::printf("%d %d %f\n", get_rc_roll(), get_rc_pitch(), lidar.obstacle_direction());
-                }
-            }
         //-------------------------------------------------
 
         // process pilot's roll and pitch input
         wp_nav.set_pilot_desired_acceleration(channel_roll->control_in, channel_pitch->control_in);
-
-
 
         // get pilot's desired yaw rate
         target_yaw_rate = get_pilot_desired_yaw_rate(channel_yaw->control_in);

@@ -12,7 +12,7 @@
 #include <AP_HAL/AP_HAL.h>
 
 #define BUFF_SIZE 128
-#define MSG_SIZE 6
+#define MSG_SIZE 10
  extern const AP_HAL::HAL& hal;
 
 class AC_LiDAR_RPLiDARSerial: public AC_LiDAR_Backend {
