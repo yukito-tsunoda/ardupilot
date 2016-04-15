@@ -50,16 +50,28 @@ void Copter::loiter_run()
         // apply SIMPLE mode transform to pilot inputs
         update_simple_mode();
 
-        if (lidar.obstacle_avoid())
-        {
-            lidar.calculate_roll_n_pitch();
-            set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());
+        //-------------------------------------------------
+            // TODO: Check if lidar is initialized
+            if (lidar.withdraw_from_obstacle())
+            {
+                set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());
 
-            //hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
-            //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
-            //::printf("%d %d\n", new_roll, new_pitch);
-            //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());
-        }
+                //hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
+                //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
+                //::printf("%d %d\n", lidar.get_override_roll(), lidar.get_override_pitch());
+                //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());
+                //::printf("\n!!!!!!!!!!\n");
+            }
+
+
+            else if (lidar.disregard_pilot_input( get_rc_roll(), get_rc_pitch() ))
+			{
+				set_rpm_to_avoid(1500, 1500);
+				//::printf("%d %d %f\n", get_rc_roll(), get_rc_pitch(), lidar.obstacle_direction());
+                //::printf("\n**********\n");
+			}
+
+        //-------------------------------------------------
 
         // process pilot's roll and pitch input
         wp_nav.set_pilot_desired_acceleration(channel_roll->control_in, channel_pitch->control_in);

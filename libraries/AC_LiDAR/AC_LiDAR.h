@@ -11,10 +11,10 @@
 #include <AP_SerialManager/AP_SerialManager.h>
 
 // maximum number of LiDAR
-#define AC_LIDAR_MAX_INSTANCES 1
+#define AC_LIDAR_MAX_INSTANCES 2
 
 #define RPM_NEUTRAL 1500
-#define RPM_OFFSET 100
+#define RPM_OFFSET 150
 #define RPM_COEFFICIENT 1.0
 
 class AC_LiDAR_Backend;
@@ -37,12 +37,13 @@ public:
     };
 
     struct Obstacle {
-    	bool avoid;
+    	bool withdraw;
+    	bool disregard;
 		float direction;
 		float distance;
 		uint32_t last_time_ms;
 
-		Obstacle(): avoid (false), direction (0.0), distance (10000), last_time_ms (0){}
+		Obstacle(): withdraw (false), disregard (false), direction (0.0), distance (10000), last_time_ms (0){}
     };
 
 	// init - detect and initialise all LiDARs
@@ -58,17 +59,21 @@ public:
 
     AP_Int8  _type[AC_LIDAR_MAX_INSTANCES];
 
-    bool obstacle_avoid();
+    bool withdraw_from_obstacle();
+    bool obstacle_disregard();
 	float obstacle_direction();
 	float obstacle_distance();
 	uint32_t obstacle_last_time_ms();
 	uint32_t obstacle_elapsed_time_ms();
 
 	void calculate_roll_n_pitch();
+
 	int get_override_roll();
 	int get_override_pitch();
 	int get_counter_roll();
 	int get_counter_pitch();
+
+	bool disregard_pilot_input(int16_t in_roll, int16_t in_pitch);
 
 protected:
     // front end members

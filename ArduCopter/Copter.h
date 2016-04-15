@@ -870,6 +870,8 @@ private:
     void enable_motor_output();
     void read_radio();
     void set_rpm_to_avoid(int16_t roll, int16_t pitch);
+    int16_t get_rc_roll();
+    int16_t get_rc_pitch();
     void set_throttle_and_failsafe(uint16_t throttle_pwm);
     void set_throttle_zero_flag(int16_t throttle_control);
     void init_barometer(bool full_calibration);

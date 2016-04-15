@@ -97,9 +97,9 @@ void AC_LiDAR::update()
 }
 
 
-bool AC_LiDAR::obstacle_avoid()
+bool AC_LiDAR::withdraw_from_obstacle()
 {
-	return obstacle.avoid;
+	return obstacle.withdraw;
 }
 
 
@@ -137,18 +137,19 @@ void AC_LiDAR::update_sitl(uint8_t instance, const double sitl_scan[])
 
 void AC_LiDAR::calculate_roll_n_pitch()
 {
-    override_roll = -sin(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
-    override_pitch = cos(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
+    
 }
 
 int AC_LiDAR::get_override_roll()
 {
-    return override_roll;
+    //return override_roll;
+    return override_roll = -sin(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
 }
 
 int AC_LiDAR::get_override_pitch()
 {
-    return override_pitch;
+    //return override_pitch;
+    return override_pitch = cos(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
 }
 
 int AC_LiDAR::get_counter_roll()
@@ -159,4 +160,27 @@ int AC_LiDAR::get_counter_roll()
 int AC_LiDAR::get_counter_pitch()
 {
     return RPM_NEUTRAL + RPM_COEFFICIENT * (RPM_NEUTRAL - override_pitch);
+}
+
+bool AC_LiDAR::disregard_pilot_input(int16_t in_roll, int16_t in_pitch)
+{
+	if (obstacle.disregard)
+	{
+		float x1 = sin(obstacle_direction() - M_PI/2);
+		float y1 = cos(obstacle_direction() - M_PI/2);
+
+		float x2 = sin(obstacle_direction() + M_PI/2);
+		float y2 = cos(obstacle_direction() + M_PI/2);
+
+		float rc_in_x = in_roll - RPM_NEUTRAL;
+		float rc_in_y = -(in_pitch - RPM_NEUTRAL);
+
+		float rc_direction = rc_in_x * (y1-y2) + x1 * (y2-rc_in_y) + x2 * (rc_in_y-y1);
+		float obstacle_side = sin(obstacle_direction()) * (y1-y2) + x1 * (y2-cos(obstacle_direction())) + x2 * (cos(obstacle_direction())-y1);
+
+		return (rc_direction > 0 && obstacle_side > 0) || (rc_direction < 0 && obstacle_side < 0);
+	}
+
+	else
+		return false;
 }
