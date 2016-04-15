@@ -80,54 +80,6 @@ void Copter::read_lidar(void)
 	lidar.update();
 }
 #endif
-
-
-// Dirty trick, should be replaced by a new parameter for range finder
-// that indicates their orientation (bottom/front/left/...). This way
-// the primary range finder instance, used for terrain following, would
-// not be confused with a frontal range finder.
-#define RANGEFINDER_FRONT_INSTANCE    1
-
-// return front sonar range in centimeters
-int16_t Copter::read_sonar_front(void)
-{
-#if CONFIG_SONAR == ENABLED
-    // We leave the update() call to the main loop
-    //sonar.update();
-    
-    // exit immediately if sonar is disabled
-    if (sonar.status(RANGEFINDER_FRONT_INSTANCE) != RangeFinder::RangeFinder_Good) {
-        sonar_front_health = 0;
-        return 0;
-    }
-
-    int16_t temp_rng = sonar.distance_cm(RANGEFINDER_FRONT_INSTANCE);
-
-    if (temp_rng >= sonar.min_distance_cm(RANGEFINDER_FRONT_INSTANCE) &&
-        temp_rng <= sonar.max_distance_cm(RANGEFINDER_FRONT_INSTANCE) * SONAR_RELIABLE_DISTANCE_PCT) {
-        if ( sonar_front_health < SONAR_ALT_HEALTH_MAX ) {
-            sonar_front_health++;
-        }
-    }else{
-        sonar_front_health = 0;
-    }
-
-    sonar_front_rng = temp_rng;
-    new_measure_front_sonar = true;
-
- #if SONAR_FRONT_TILT_CORRECTION == 1       // not for now, but can also be applied to horizontal sonar
-    // correct alt for angle of the sonar
-  /*  float temp = ahrs.cos_pitch() * ahrs.cos_roll();
-    temp = max(temp, 0.707f);
-    temp_alt = (float)temp_alt * temp;*/
- #endif
-
-    return temp_rng;
-#else
-    return 0;
-#endif      // CONFIG_SONAR
-}
-
 /*
   update RPM sensors
  */

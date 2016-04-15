@@ -50,13 +50,14 @@ void AC_LiDAR_SITL::detect_obstacle()
     int min_index = 0;
     double min_range = 10000;
 
-    for (int i=0; i<SITL_SCAN_SIZE; ++i)
+    for (int i=2; i<SITL_SCAN_SIZE; ++i) // First index has an error, need to be fixed!
     {
         if (scan[i] < min_range && scan[i] > MIN_SCAN_RANGE)
         {
             min_range = scan[i];
             min_index = i;
         }
+        ::printf(" %f",scan[i]);
     }
 
     if (min_range < DISTANCE_TO_WITHDRAW)

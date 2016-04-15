@@ -35,11 +35,7 @@ struct PACKED sitl_fdm_extras {
     // whether this data is filled in by the simulator.
     // All values are little-endian
     uint64_t timestamp_us;
-    double sonar_down;              // m
-    bool is_sonar_down_present;
 
-    double sonar_front;              // m
-    bool is_sonar_front_present;
     // Insert here any additional sensor
     double lidar[LIDAR_SCAN_SIZE];
 

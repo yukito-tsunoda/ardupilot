@@ -48,11 +48,7 @@ Gazebo::Gazebo(const char *home_str, const char *frame_str) :
     _is_servos_socket_open(false),
     _is_fdm_socket_open(false),
     _link_status(NOT_INITIALIZED),
-    _last_timestamp(0.0),
-    _is_sonar_down_present(true),
-    _sonar_down(0.0),
-    _is_sonar_front_present(true),
-    _sonar_front(0.0)
+    _last_timestamp(0.0)
 {
 }
 
@@ -265,13 +261,10 @@ void Gazebo::recv_fdm(const struct sitl_input &input)
     location.alt = pkt.position_latlonalt[2] *1.0e2;
 
     // Extra sensors -------------------------
-    _sonar_down = pkt.sonar_down;
-    _sonar_front = pkt.sonar_front;
-    // ...
-    // ---------------------------------------
-
     for(int i=0; i<LIDAR_SCAN_SIZE; ++i)
         lidar_scan[i] = pkt.lidar_scan[i];
+
+    // ---------------------------------------
 
     // auto-adjust to simulation frame rate
     double deltat = pkt.timestamp - _last_timestamp;    // [seconds]
@@ -363,11 +356,6 @@ void Gazebo::fill_fdm_extras(struct sitl_fdm_extras &fdm_extras) const
     // Usual simulators do not support extra sensors. So all 'is_xxx_present' fields
     // are set to false.
     fdm_extras.timestamp_us = time_now_us;
-    fdm_extras.sonar_down = _sonar_down;
-    fdm_extras.is_sonar_down_present = _is_sonar_down_present;
-
-    fdm_extras.sonar_front = _sonar_front;
-    fdm_extras.is_sonar_front_present = _is_sonar_front_present;
 
     fdm_extras.magic = FDM_EXTRAS_MAGIC;
 

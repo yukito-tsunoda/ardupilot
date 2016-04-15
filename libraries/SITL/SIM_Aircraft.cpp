@@ -280,8 +280,6 @@ void Aircraft::fill_fdm_extras(struct sitl_fdm_extras &fdm_extras) const
     // Usual simulators do not support extra sensors. So all 'is_xxx_present' fields
     // are set to false.
     fdm_extras.timestamp_us = 0;
-    fdm_extras.sonar_down = 0;
-    fdm_extras.is_sonar_down_present = false;
     fdm_extras.magic = FDM_EXTRAS_MAGIC;
 }
 

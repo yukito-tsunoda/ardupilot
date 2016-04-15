@@ -54,21 +54,21 @@ void Copter::loiter_run()
             // TODO: Check if lidar is initialized
             if (lidar.withdraw_from_obstacle())
             {
-                lidar.calculate_roll_n_pitch();
-
                 set_rpm_to_avoid(lidar.get_override_roll(), lidar.get_override_pitch());
 
                 //hal.console->printf_P(PSTR("%d %d\n"), lidar.get_override_roll(), lidar.get_override_pitch());
                 //hal.console->printf_P(PSTR("%fdeg --- %fm\n\n"), lidar.obstacle_direction(), lidar.obstacle_distance());
                 //::printf("%d %d\n", lidar.get_override_roll(), lidar.get_override_pitch());
                 //::printf("%fdeg --- %fm\n\n", lidar.obstacle_direction(), lidar.obstacle_distance());
+                //::printf("\n!!!!!!!!!!\n");
             }
 
 
             else if (lidar.disregard_pilot_input( get_rc_roll(), get_rc_pitch() ))
 			{
-				set_rpm_to_avoid(1500, 1500);
+				//set_rpm_to_avoid(1500, 1500);
 				//::printf("%d %d %f\n", get_rc_roll(), get_rc_pitch(), lidar.obstacle_direction());
+                //::printf("\n**********\n");
 			}
 
         //-------------------------------------------------

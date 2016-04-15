@@ -80,7 +80,6 @@ void SITL_State::_sitl_setup(void)
     _compass = (Compass *)AP_Param::find_object("COMPASS_");
     _terrain = (AP_Terrain *)AP_Param::find_object("TERRAIN_");
     _optical_flow = (OpticalFlow *)AP_Param::find_object("FLOW");
-    _range_finder = (RangeFinder *)AP_Param::find_object("RNGFND");
     _lidar = (AC_LiDAR *)AP_Param::find_object("LDR");
 
     if (_sitl != NULL) {
@@ -90,8 +89,6 @@ void SITL_State::_sitl_setup(void)
         _update_ins(0, 0, 0, 0, 0, 0, 0, 0, -9.8, 0, 100);
         _update_compass(0, 0, 0);
         _update_gps(0, 0, 0, 0, 0, 0, false);
-        _update_range_finder(0);
-        _update_range_finder_front(0);
 #endif
         if (enable_gimbal) {
             gimbal = new Gimbal(_sitl->state);
@@ -207,16 +204,6 @@ void SITL_State::_fdm_input_step(void)
         _update_barometer(_sitl->state.altitude);
         _update_compass(_sitl->state.rollDeg, _sitl->state.pitchDeg, _sitl->state.yawDeg);
         _update_flow();
-
-         // Range finder (if simulated/present)
-       if (_sitl->state_extras.is_sonar_down_present)
-           _update_range_finder(_sitl->state_extras.sonar_down);
-
-       // Front range finder (if present)
-       if (_sitl->state_extras.is_sonar_front_present)
-           _update_range_finder_front(_sitl->state_extras.sonar_front);
-       else
-           _update_range_finder_front_state(false);
 
        _update_lidar(_sitl->state_extras.lidar);
     }

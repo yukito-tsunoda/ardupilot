@@ -71,8 +71,6 @@ private:
       double position_latlonalt[3];                 // [degrees], altitude is Up
 
       // You can add here extra sensors to pass along
-      double sonar_down;                            // [m] downward facing range finder
-      double sonar_front;                           // [m]
       double lidar_scan[LIDAR_SCAN_SIZE];
     };
 
@@ -132,16 +130,6 @@ protected:
     virtual void fill_fdm_extras(struct sitl_fdm_extras &fdm_extras) const;
 
     // You can add here data handling for extra sensors not covered by SIM_Aircraft
-
-    /* Whether the downward facing range finder is simulated or not */
-    bool _is_sonar_down_present;
-    /* Last range measurement by the downward facing range finder */
-    double _sonar_down;
-
-    /* Whether the forward facing range finder is simulated or not */
-    bool _is_sonar_front_present;
-    /* Last range measurement by the forward facing range finder */
-    double _sonar_front;
 
     double lidar_scan[LIDAR_SCAN_SIZE];
 };

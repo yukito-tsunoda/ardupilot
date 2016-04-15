@@ -141,18 +141,19 @@ void AC_LiDAR::update_sitl(uint8_t instance, const double sitl_scan[])
 
 void AC_LiDAR::calculate_roll_n_pitch()
 {
-    override_roll = -sin(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
-    override_pitch = cos(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
+    
 }
 
 int AC_LiDAR::get_override_roll()
 {
-    return override_roll;
+    //return override_roll;
+    return override_roll = -sin(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
 }
 
 int AC_LiDAR::get_override_pitch()
 {
-    return override_pitch;
+    //return override_pitch;
+    return override_pitch = cos(obstacle.direction) * RPM_OFFSET + RPM_NEUTRAL;
 }
 
 int AC_LiDAR::get_counter_roll()

@@ -14,7 +14,7 @@
 #define AC_LIDAR_MAX_INSTANCES 2
 
 #define RPM_NEUTRAL 1500
-#define RPM_OFFSET 100
+#define RPM_OFFSET 150
 #define RPM_COEFFICIENT 1.0
 
 class AC_LiDAR_Backend;
