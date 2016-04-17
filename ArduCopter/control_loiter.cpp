@@ -66,7 +66,7 @@ void Copter::loiter_run()
 
             else if (lidar.disregard_pilot_input( get_rc_roll(), get_rc_pitch() ))
 			{
-				//set_rpm_to_avoid(1500, 1500);
+				set_rpm_to_avoid(1500, 1500);
 				//::printf("%d %d %f\n", get_rc_roll(), get_rc_pitch(), lidar.obstacle_direction());
                 //::printf("\n**********\n");
 			}

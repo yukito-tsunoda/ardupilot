@@ -7,7 +7,6 @@
 
 #include "AC_LiDAR.h"
 #include "AC_LiDAR_RPLiDARSerial.h"
-#include "AC_LiDAR_SITL.h"
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -46,8 +45,8 @@ AC_LiDAR::AC_LiDAR(AP_SerialManager &_serial_manager) :
 	/*
 		AP_Param::setup_object_defaults(this, var_info);
 
-		// init state and drivers
 		memset(state,0,sizeof(state));
+		// init state and drivers
 		memset(drivers,0,sizeof(drivers));
 	*/
 	}
@@ -65,10 +64,6 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
         {
             case 0 :
                 _backends[instance] = new AC_LiDAR_RPLiDARSerial(*this, instance, obstacle);
-                break;
-
-            case 1 :
-                _backends[instance] = new AC_LiDAR_SITL(*this, instance, obstacle);
                 break;
 
             default :
@@ -101,11 +96,6 @@ void AC_LiDAR::update()
 	}
 }
 
-
-bool AC_LiDAR::withdraw_from_obstacle()
-{
-	return obstacle.withdraw;
-}
 
 float AC_LiDAR::obstacle_direction()
 {
@@ -166,15 +156,22 @@ int AC_LiDAR::get_counter_pitch()
     return RPM_NEUTRAL + RPM_COEFFICIENT * (RPM_NEUTRAL - override_pitch);
 }
 
+
+bool AC_LiDAR::withdraw_from_obstacle()
+{
+	return obstacle.withdraw;
+}
+
+
 bool AC_LiDAR::disregard_pilot_input(int16_t in_roll, int16_t in_pitch)
 {
 	if (obstacle.disregard)
 	{
-		float x1 = sin(obstacle_direction() - M_PI/2);
-		float y1 = cos(obstacle_direction() - M_PI/2);
+		float x1 = sin(obstacle_direction() - M_PI_2);
+		float y1 = cos(obstacle_direction() - M_PI_2);
 
-		float x2 = sin(obstacle_direction() + M_PI/2);
-		float y2 = cos(obstacle_direction() + M_PI/2);
+		float x2 = sin(obstacle_direction() + M_PI_2);
+		float y2 = cos(obstacle_direction() + M_PI_2);
 
 		float rc_in_x = in_roll - RPM_NEUTRAL;
 		float rc_in_y = -(in_pitch - RPM_NEUTRAL);
