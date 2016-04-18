@@ -7,8 +7,10 @@
 
 #include "AC_LiDAR.h"
 #include "AC_LiDAR_RPLiDARSerial.h"
+ #include "AC_LiDAR_SITL.h"
 
 #include <AP_HAL/AP_HAL.h>
+#include <stdio.h>
 
 extern const AP_HAL::HAL& hal;
 
@@ -64,6 +66,10 @@ void AC_LiDAR::init(const AP_SerialManager& serial_manager)
         {
             case 0 :
                 _backends[instance] = new AC_LiDAR_RPLiDARSerial(*this, instance, obstacle);
+                break;
+
+            case 1 :
+                _backends[instance] = new AC_LiDAR_SITL(*this, instance, obstacle);
                 break;
 
             default :

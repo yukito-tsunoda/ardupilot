@@ -36,7 +36,6 @@ void AC_LiDAR_SITL::update()
 
 void AC_LiDAR_SITL::update_sitl(const double _scan[])
 {
-
     for (int i=0; i<SITL_SCAN_SIZE; ++i)
     {
         scan[i] = _scan[i];
@@ -57,7 +56,6 @@ void AC_LiDAR_SITL::detect_obstacle()
             min_range = scan[i];
             min_index = i;
         }
-        ::printf(" %f",scan[i]);
     }
 
     if (min_range < DISTANCE_TO_WITHDRAW)
