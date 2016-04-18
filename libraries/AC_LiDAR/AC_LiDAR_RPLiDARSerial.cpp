@@ -90,8 +90,6 @@ bool AC_LiDAR_RPLiDARSerial::parse_serial()
 		memcpy(&(obstacle.direction), &buff[1], sizeof(float));
 		memcpy(&(obstacle.distance), &buff[5], sizeof(float));
 
-		hal.console->printf_P(PSTR("%c %f %f \n"), buff[0], obstacle.direction, obstacle.distance);
-
 		switch (buff[0])
 		{
 			case 'c':

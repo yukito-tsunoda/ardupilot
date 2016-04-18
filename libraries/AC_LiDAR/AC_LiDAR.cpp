@@ -100,6 +100,12 @@ void AC_LiDAR::update()
 	{
 		_backends[_primary]->update();
 	}
+
+	//hal.console->printf_P(PSTR("%d %d \n"), obstacle.withdraw, obstacle.disregard);
+	if(obstacle.withdraw)
+	{
+		hal.console->printf_P(PSTR("%d %d \n"), get_override_roll(), get_override_pitch());
+	}
 }
 
 
